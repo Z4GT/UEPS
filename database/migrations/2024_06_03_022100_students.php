@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('course');
             $table->float('hours');
             $table->timestamps();
+        
         });
     }
 

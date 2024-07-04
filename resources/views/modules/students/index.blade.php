@@ -96,16 +96,16 @@
                                             <div class="tw-flex tw-items-center">
                                                 <input id="select_all_ids" type="checkbox"
                                                     class="tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
-
                                             </div>
                                         </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">ID</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Cédula</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Nombre</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Apellido</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Curso</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Horas</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">ID</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Cédula</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Nombre</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Apellido</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Curso</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Horas</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Módulos</th>
+                                        <th scope="row" class="tw-px-6 tw-py-3">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -117,15 +117,25 @@
                                                     <input type="checkbox" id="" name="ids"
                                                         class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600"
                                                         value="{{ $student->id_stud }}">
-
                                                 </div>
                                             </td>
-                                            <td class="tw-px-6 tw-py-4">{{ $student->id_stud }}</td>
+                                            <td class="tw-px-6 tw-py-4">
+                                                {{ $student->id_stud }}
+                                            </td>
                                             <td class="tw-px-6 tw-py-4">{{ $student->card_id }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $student->name }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $student->last_name }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $student->course }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $student->hours }}</td>
+                                            <td class="tw-px-6 tw-py-4">
+                                                <button type="button"
+                                                    class="tw-focus:tw-outline-none tw-text-white tw-bg-green-700 hover:tw-bg-green-800 tw-focus:tw-ring-4 tw-focus:tw-ring-green-300 tw-font-medium tw-rounded-lg tw-text-sm tw-px-5 tw-py-2.5 tw-me-2 tw-mb-2 dark:tw-bg-green-600 dark:hover:tw-bg-green-700 dark:tw-focus:tw-ring-green-800"
+                                                    data-bs-toggle="modal" data-bs-target="#modulesModal"
+                                                    data-student-id="{{ $student->id_stud }}">
+                                                    Ver
+                                                </button>
+                                            </td>
+
                                             <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
                                                 <a href="#"
                                                     class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"
@@ -167,6 +177,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
                             <div
                                 class="tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-3 tw-bg-white tw-border-t tw-border-gray-200 sm:tw-px-6">
                                 <div class="tw-flex tw-items-center">
@@ -194,6 +205,29 @@
         </div>
         <x-app.footer />
     </main>
+
+    <!-- Modal modules-->
+    <div class="modal fade" id="modulesModal" tabindex="-1" aria-labelledby="modulesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modulesModalLabel">Módulos del Estudiante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="modulesList" class="list-group">
+                        <!-- Los módulos se agregarán aquí -->
+                    </ul>
+                    <p id="noModulesMessage" class="text-center text-danger mt-3" style="display: none;">El
+                        estudiante no está cursando ningún módulo actualmente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <!-- Create Student Modal -->
     <div class="modal fade" id="createStudentModal" tabindex="-1" aria-labelledby="createStudentModalLabel"
@@ -310,6 +344,46 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modulesModal = document.getElementById('modulesModal');
+        var modulesList = document.getElementById('modulesList');
+        var noModulesMessage = document.getElementById('noModulesMessage');
+
+        modulesModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var studentId = button.getAttribute('data-student-id');
+
+            // Realizar una solicitud AJAX para obtener los módulos del estudiante
+            fetch(`/info/students/${studentId}/modules`)
+                .then(response => response.json())
+                .then(data => {
+                    modulesList.innerHTML = ''; // Limpiar la lista de módulos
+                    if (data.modules.length > 0) {
+                        noModulesMessage.style.display = 'none'; // Ocultar el mensaje de error
+                        data.modules.forEach(module => {
+                            var listItem = document.createElement('li');
+                            listItem.className = 'list-group-item';
+                            listItem.textContent = module.name;
+                            modulesList.appendChild(listItem);
+                        });
+                    } else {
+                        noModulesMessage.style.display = 'block'; // Mostrar el mensaje de error
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    console.log(error);
+                    noModulesMessage.textContent = 'Hubo un error al obtener los módulos.';
+                    noModulesMessage.style.display = 'block'; // Mostrar el mensaje de error
+                });
+        });
+    });
+</script>
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

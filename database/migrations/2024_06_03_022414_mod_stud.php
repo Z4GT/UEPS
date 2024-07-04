@@ -22,8 +22,8 @@ return new class extends Migration
             $table->index('id_stud');
 
             // Relaciones
-            $table->foreign('id_mod')->references('id_mod')->on('modules')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('id_stud')->references('id_stud')->on('students')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_mod')->references('id_mod')->on('modules')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_stud')->references('id_stud')->on('students')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

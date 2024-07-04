@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'John',
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Jane',
@@ -41,6 +43,7 @@ class UserSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Michael',
@@ -50,6 +53,7 @@ class UserSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Emily',
@@ -59,6 +63,7 @@ class UserSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Alec',
@@ -68,6 +73,27 @@ class UserSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Zamyr',
+                'last_name' => 'Guevara',
+                'email' => 'admin@ueps.com',
+                'password' => Hash::make('secret'),
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Alejandro',
+                'last_name' => 'Mallama',
+                'email' => 'alejo@ueps.com',
+                'password' => Hash::make('Alejo123'),
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'email_verified_at' => now(),
             ],
         ]);
     }

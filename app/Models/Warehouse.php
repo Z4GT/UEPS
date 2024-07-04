@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Warehouse extends Model
+class Warehouse extends Model implements Auditable
+
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $primaryKey = 'id_ware';
     public $incrementing = false;

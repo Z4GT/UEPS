@@ -104,7 +104,8 @@
                                         <th scope="col" class="tw-px-6 tw-py-3">Responsable</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Fecha de Inicio</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Fecha de Fin</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Horas de Vinculación</th>
+                                        <th scope="col" class="tw-px-6 tw-py-3 tw-w-2">Horas de Vinculación</th>
+                                        <th scope="col" class="tw-px-6 tw-py-3">Estudiantes</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
                                     </tr>
                                 </thead>
@@ -122,10 +123,17 @@
                                             <td class="tw-px-6 tw-py-4">{{ $module->name }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $module->responsible->name }}
                                                 {{ $module->responsible->last_name }}</td>
-
                                             <td class="tw-px-6 tw-py-4">{{ $module->start_date }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $module->end_date }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $module->vinculation_hours }}</td>
+                                            <td class="tw-px-6 tw-py-4" style="width: 150px;">
+                                                <button type="button"
+                                                    class="tw-w-full tw-text-white tw-bg-green-700 hover:tw-bg-green-800 focus:tw-ring-4 focus:tw-ring-green-300 tw-font-medium tw-rounded-lg tw-text-sm tw-px-2 tw-py-1 dark:tw-bg-green-600 dark:hover:tw-bg-green-700 dark:tw-focus:tw-ring-green-800"
+                                                    data-bs-toggle="modal" data-bs-target="#studentsModal"
+                                                    data-module-id="{{ $module->id_mod }}">
+                                                    Ver
+                                                </button>
+                                            </td>
                                             <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
                                                 <a href="#"
                                                     class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"
@@ -167,6 +175,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
                             <div
                                 class="tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-3 tw-bg-white tw-border-t tw-border-gray-200 sm:tw-px-6">
                                 <div class="tw-flex tw-items-center">
@@ -195,6 +204,29 @@
         <x-app.footer />
     </main>
 
+    <!-- Modal para mostrar estudiantes -->
+    <div class="modal fade" id="studentsModal" tabindex="-1" aria-labelledby="studentsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentsModalLabel">Estudiantes en el Módulo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="studentsList" class="tw-list-disc tw-ml-4">
+                        <!-- Los estudiantes se cargarán aquí -->
+                    </ul>
+                    <div id="noStudentsMessage" class="tw-hidden tw-text-red-600">
+                        Este módulo no tiene estudiantes actualmente.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Create Module Modal -->
     <div class="modal fade" id="createModuleModal" tabindex="-1" aria-labelledby="createModuleModalLabel"
         aria-hidden="true">
@@ -202,7 +234,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="createModuleModalLabel">Agregar módulo</h5>
-                    <button type="button" class=" btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         style="background-color: red"></button>
                 </div>
                 <div class="modal-body">
@@ -220,11 +252,11 @@
                                 </select>
                             </div>
                             <div class="pt-4">
-                                <a href="{{ route('responsibles.index') }}" class="btn btn-info">Agregar
-                                    Responsable</a>
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#createResponsibleModal" data-bs-dismiss="modal">Agregar
+                                    Responsable</button>
                             </div>
                         </div>
-
                         <div class="mb-3">
                             <label for="name" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -248,6 +280,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Edit Module Modal -->
     <div class="modal fade" id="editModuleModal" tabindex="-1" aria-labelledby="editModuleModalLabel"
@@ -275,8 +308,9 @@
                                 </select>
                             </div>
                             <div class="pt-4">
-                                <a href="{{ route('responsibles.index') }}" class="btn btn-info">Agregar
-                                    Responsable</a>
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#createResponsibleModal" data-bs-dismiss="modal">Agregar
+                                    Responsable</button>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -303,6 +337,56 @@
             </div>
         </div>
     </div>
+
+
+    {{-- Modal Responsable --}}
+    <div class="modal fade" id="createResponsibleModal" tabindex="-1" aria-labelledby="createResponsibleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createResponsibleModalLabel">Agregar responsable</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        style="background-color: red"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createResponsibleForm" method="POST" action="{{ route('responsibles.store') }}">
+                        @csrf
+                        <input type="hidden" name="from_module" value="true">
+                        <div class="mb-3">
+                            <label for="card_id" class="form-label">Cédula</label>
+                            <input type="text" class="form-control" id="card_id" name="card_id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="area" class="form-label">Área</label>
+                            <input type="text" class="form-control" id="area" name="area" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Rol</label>
+                            <input type="text" class="form-control" id="role" name="role" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Estado</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </x-app-layout>
 
 <script>
@@ -336,6 +420,38 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var studentsModal = document.getElementById('studentsModal');
+        studentsModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var moduleId = button.getAttribute('data-module-id');
+
+
+            fetch(`/modules/${moduleId}/students`)
+                .then(response => response.json())
+                .then(data => {
+                    var studentsList = document.getElementById('studentsList');
+                    var noStudentsMessage = document.getElementById('noStudentsMessage');
+
+                    studentsList.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(student => {
+                            var listItem = document.createElement('li');
+                            listItem.textContent = student.name + ' ' + student.last_name;
+                            studentsList.appendChild(listItem);
+                        });
+                        studentsList.classList.remove('tw-hidden');
+                        noStudentsMessage.classList.add('tw-hidden');
+                    } else {
+                        studentsList.classList.add('tw-hidden');
+                        noStudentsMessage.classList.remove('tw-hidden');
+                    }
+                })
+                .catch(error => console.error('Error al obtener los estudiantes:', error));
+        });
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -358,6 +474,34 @@
             deleteUrl: "{{ route('module.delete') }}",
             csrfToken: "{{ csrf_token() }}",
             rowIdPrefix: "#modules_ids"
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Almacenar el modal de módulo activo (agregar o editar)
+        var activeModuleModal = null;
+
+        // Abrir modal de agregar responsable desde modal de agregar o editar módulo
+        document.querySelectorAll('[data-bs-target="#createResponsibleModal"]').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                var parentModal = event.target.closest('.modal');
+                if (parentModal) {
+                    activeModuleModal = parentModal.getAttribute('id');
+                }
+            });
+        });
+
+        // Volver al modal de módulo activo después de cerrar el modal de agregar responsable
+        document.getElementById('createResponsibleModal').addEventListener('hidden.bs.modal', function() {
+            if (activeModuleModal) {
+                var moduleModal = document.getElementById(activeModuleModal);
+                var bootstrapModal = bootstrap.Modal.getInstance(moduleModal);
+                bootstrapModal.show();
+                activeModuleModal = null;
+            }
         });
     });
 </script>

@@ -109,21 +109,38 @@
                 </a>
             </li>
 
+
+            <li class="nav-item">
+                <a class="nav-link {{ is_current_route('audits.index') ? 'active' : '' }}"
+                    href="{{ route('audits.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <img src="{{ asset('assets/img/logos/audit.svg') }}" class="tw-w-6" style="filter: invert(1);"
+                            alt="Audit Logo">
+                    </div>
+                    <span class="nav-link-text ms-1">Auditoría</span>
+                </a>
+            </li>
+
+
             <li class="nav-item">
                 <a class="nav-link 
                 {{ Request::is('proyectos') || Request::is('proyectos/*') ? 'active' : '' }}"
                     href="{{ route('proyectos') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <svg width="30px" height="30px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <svg width="30px" height="30px" viewBox="0 0 48 48" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>project</title>
                             <g id="info" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <g id="folder" transform="translate(12.000000, 15.000000)" fill="#FFFFFF">
-                                    <path class="color-foreground" d="M3,0 C1.343145,0 0,1.343145 0,3 L0,15 C0,16.6569 1.343145,18 3,18 L21,18 C22.6569,18 24,16.6569 24,15 L24,6 C24,4.343145 22.6569,3 21,3 L10,3 L8,1 L3,1 C1.343145,1 0,2.343145 0,4 L0,3 Z" id="Path"></path>
+                                    <path class="color-foreground"
+                                        d="M3,0 C1.343145,0 0,1.343145 0,3 L0,15 C0,16.6569 1.343145,18 3,18 L21,18 C22.6569,18 24,16.6569 24,15 L24,6 C24,4.343145 22.6569,3 21,3 L10,3 L8,1 L3,1 C1.343145,1 0,2.343145 0,4 L0,3 Z"
+                                        id="Path"></path>
                                 </g>
                             </g>
                         </svg>
-                        
+
                     </div>
                     <span class="nav-link-text ms-1">Proyecto</span>
                 </a>

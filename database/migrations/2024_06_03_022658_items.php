@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->string('id_item')->primary();
-            $table->string('id_catitem')->nullable();
-            $table->string('id_unit')->nullable();
-            $table->string('id_pro')->nullable();
+            $table->string('id_catitem');
+            $table->string('id_unit');
+            $table->string('id_pro');
             $table->string('name');
             $table->string('description');
-            $table->date('date')->nullable();
+            $table->date('date');
             $table->timestamps();
 
             // Índices adicionales

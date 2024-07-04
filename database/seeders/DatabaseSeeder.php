@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             MeasurementUnitSeeder::class,
             OperationTypeSeeder::class,
             ProjectSeeder::class,
+            ModStudSeeder::class,
         ]);
     }
 }

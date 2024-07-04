@@ -7,13 +7,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Notifications\CustomVerifyEmail;
+use OwenIt\Auditing\Contracts\Auditable;
 
-
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, Auditable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use \OwenIt\Auditing\Auditable;
 
+
+    protected $fillable = [
+        'name',
+        'last_name',
+        'email',
+        'password',
+        'status',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -42,12 +50,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'status' => 'boolean',
     ];
 
-    public function getStatusAttribute($value)
-    {
-        return $value ? 'Activo' : 'Inactivo';
-    }
-    // public function sendEmailVerificationNotification()
+    // public function getStatusAttribute($value)
     // {
-    //     $this->notify(new CustomVerifyEmail);
+    //     return $value ? 'Activo' : 'Inactivo';
     // }
 }

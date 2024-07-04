@@ -22,7 +22,7 @@ class StudentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'card_id' => 'required|string|max:10',
+            'card_id' => 'required|string|max:10|unique:students',
             'last_name' => 'required|string|max:255',
             'course' => 'required|string|max:255',
             'hours' => 'required|numeric',
@@ -34,11 +34,22 @@ class StudentController extends Controller
         // Extraer el número del id_stud y convertirlo a entero
         $lastIdNumber = $lastStudent ? intval(substr($lastStudent->id_stud, 4)) : 0;
 
-        // Incrementar el número para el nuevo ID
-        $newIdNumber = str_pad($lastIdNumber + 1, 2, '0', STR_PAD_LEFT);
+        do {
+            // Incrementar el número para el nuevo ID
+            $newIdNumber = str_pad($lastIdNumber + 1, 3, '0', STR_PAD_LEFT);
+            $newId = 'EST-' . $newIdNumber;
+
+            // Verificar si el ID ya existe
+            $exists = Student::where('id_stud', $newId)->exists();
+
+            if ($exists) {
+                // Si el ID ya existe, incrementar el número nuevamente
+                $lastIdNumber++;
+            }
+        } while ($exists);
 
         Student::create([
-            'id_stud' => 'EST-' . $newIdNumber,
+            'id_stud' => $newId,
             'card_id' => $request->card_id,
             'name' => $request->name,
             'last_name' => $request->last_name,
@@ -48,6 +59,7 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')->with('success', 'Estudiante agregado correctamente.');
     }
+
 
     public function update(Request $request, $id_stud)
     {
@@ -109,5 +121,13 @@ class StudentController extends Controller
         $date = date('d-m-Y H:i:s');;
         $excelName = "Estudiantes {$date}.xlsx";
         return Excel::download(new StudentsExport, $excelName);
+    }
+
+    public function getModules($id_stud)
+    {
+        $student = Student::findOrFail($id_stud);
+        $modules = $student->modules()->get();
+
+        return response()->json(['modules' => $modules]);
     }
 }

@@ -112,4 +112,10 @@ class ModuleController extends Controller
         $excelName = "Modulos {$date}.xlsx";
         return Excel::download(new ModuleExport, $excelName);
     }
+
+    public function getStudents($moduleId)
+    {
+        $students = Module::findOrFail($moduleId)->students; 
+        return response()->json($students);
+    }
 }

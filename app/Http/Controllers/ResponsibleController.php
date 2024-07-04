@@ -33,11 +33,22 @@ class ResponsibleController extends Controller
         // Extraer el número del id_responsible y convertirlo a entero
         $lastIdNumber = $lastResponsible ? intval(substr($lastResponsible->id_responsible, 5)) : 0;
 
-        // Incrementar el número para el nuevo ID
-        $newIdNumber = str_pad($lastIdNumber + 1, 2, '0', STR_PAD_LEFT);
+        do {
+            // Incrementar el número para el nuevo ID
+            $newIdNumber = str_pad($lastIdNumber + 1, 3, '0', STR_PAD_LEFT);
+            $newId = 'RESP-' . $newIdNumber;
+
+            // Verificar si el ID ya existe
+            $exists = Responsible::where('id_responsible', $newId)->exists();
+
+            if ($exists) {
+                // Si el ID ya existe, incrementar el número nuevamente
+                $lastIdNumber++;
+            }
+        } while ($exists);
 
         Responsible::create([
-            'id_responsible' => 'RESP-' . $newIdNumber,
+            'id_responsible' => $newId,
             'card_id' => $request->card_id,
             'name' => $request->name,
             'last_name' => $request->last_name,
@@ -46,8 +57,14 @@ class ResponsibleController extends Controller
             'status' => $request->status,
         ]);
 
+        // Verificar si la solicitud proviene del modal de módulos
+        if ($request->has('from_module') && $request->input('from_module') == 'true') {
+            return redirect()->route('modules.index')->with('success', 'Responsable agregado correctamente.');
+        }
+
         return redirect()->route('responsibles.index')->with('success', 'Responsable agregado correctamente.');
     }
+
 
     public function update(Request $request, $id_responsible)
     {

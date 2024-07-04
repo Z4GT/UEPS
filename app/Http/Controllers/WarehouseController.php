@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\WarehouseExport;
+use Illuminate\Support\Facades\Log;
 
 class WarehouseController extends Controller
 {
@@ -84,11 +85,14 @@ class WarehouseController extends Controller
         Warehouse::whereIn('id_ware', $ids)->delete();
         return response()->json(["success" => "Bodegas seleccionadas eliminadas exitosamente."]);
     }
-
     public function destroy(Warehouse $warehouse)
     {
-        $warehouse->delete();
-        return redirect()->route('warehouses.index')->with('success', 'Bodega eliminada correctamente.');
+        try {
+            $warehouse->delete();
+            return redirect()->route('warehouses.index')->with('success', 'Bodega eliminada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouses.index')->with('error', 'Error al eliminar la bodega: ' . $e->getMessage());
+        }
     }
 
     public function generatePDF()
