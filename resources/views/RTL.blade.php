@@ -138,7 +138,7 @@
                 </li>
                 <li class="nav-item border-end my-0 pt-2">
                     <a class="nav-link " href="{{ route('signup') }}">
-                        <span class="nav-link-text me-1">اشتراك</span>
+                        <span class="nav-link-text me-1">QUe diablos dira ahi </span>
                     </a>
                 </li>
             </ul>
