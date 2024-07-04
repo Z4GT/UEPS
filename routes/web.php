@@ -17,6 +17,9 @@ use App\Http\Controllers\CategoryItemController;
 use App\Http\Controllers\MeasurementUnitController;
 use App\Http\Controllers\OperationTypeController;
 use App\Http\Controllers\ProjectController;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
+use Laravel\Fortify\Http\Controllers\RecoveryCodeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,9 +61,18 @@ Route::get('/RTL', function () {
     return view('RTL');
 })->name('RTL')->middleware('auth');
 
-Route::get('/profile', function () {
-    return view('account-pages.profile');
-})->name('profile')->middleware('auth');
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
+Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
+
+
+// Rutas para la autenticación de dos factores
+Route::middleware(['auth'])->group(function () {
+    Route::post('/user/two-factor-authentication', [ProfileController::class, 'enableTwoFactorAuthentication']);
+    Route::post('/user/confirmed-two-factor-authentication', [ProfileController::class, 'confirmTwoFactorAuthentication']);
+    Route::delete('/user/two-factor-authentication', [ProfileController::class, 'disableTwoFactorAuthentication']);
+    Route::post('/user/two-factor-recovery-codes', [ProfileController::class, 'regenerateRecoveryCodes']);
+});
+
 
 Route::get('/signin', function () {
     return view('account-pages.signin');

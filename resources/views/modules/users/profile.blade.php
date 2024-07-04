@@ -2,8 +2,8 @@
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 
         <div class="top-0 bg-cover z-index-n1 min-height-100 max-height-200 h-25 position-absolute w-100 start-0 end-0"
-        style="background-color: #F9FAFB ; background-position: bottom;">
-    </div>
+             style="background-color: #F9FAFB ; background-position: bottom;">
+        </div>
         <x-app.navbar />
         <div class="px-5 py-4 container-fluid ">
             <form action="{{ route('profile.update', auth()->user()->id) }}" method="POST" enctype="multipart/form-data">
@@ -16,13 +16,13 @@
                                 <div class="col-sm-auto col-4">
                                     <div class="avatar avatar-xl position-relative">
                                         <img class="w-100 h-100 object-fit-cover border-radius-lg shadow-sm" 
-                                        src="{{ Auth::user()->profile_photo ? asset('storage/profile_photos/' . Auth::user()->profile_photo) : asset('storage/profile_photos/default.jpg') }}" 
-                                        id="profileImage" 
-                                        style="cursor:pointer;">                                   
-                                            <input type="file" name="profile_photo" id="profilePhotoInput" style="display:none;">
-                                            @error('profile_photo')
-                                                <span class="text-danger text-sm">{{ $message }}</span>
-                                            @enderror
+                                             src="{{ Auth::user()->profile_photo ? asset('storage/profile_photos/' . Auth::user()->profile_photo) : asset('storage/profile_photos/default.jpg') }}" 
+                                             id="profileImage" 
+                                             style="cursor:pointer;">
+                                        <input type="file" name="profile_photo" id="profilePhotoInput" style="display:none;">
+                                        @error('profile_photo')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-sm-auto col-8 my-auto">
@@ -34,7 +34,7 @@
                                             {{ auth()->user()->last_name }}
                                         </p>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                                     <div class="col-6">
                                         <label for="name">Nombre</label>
                                         <input type="text" name="name" id="name"
-                                            value="{{ old('name', auth()->user()->name) }}" class="form-control">
+                                               value="{{ old('name', auth()->user()->name) }}" class="form-control">
                                         @error('name')
                                             <span class="text-danger text-sm">{{ $message }}</span>
                                         @enderror
@@ -73,7 +73,7 @@
                                     <div class="col-6">
                                         <label for="email">Correo Electronico</label>
                                         <input type="email" name="email" id="email"  readonly
-                                            value="{{ old('email', auth()->user()->email) }}" class="form-control">
+                                               value="{{ old('email', auth()->user()->email) }}" class="form-control">
                                         @error('email')
                                             <span class="text-danger text-sm">{{ $message }}</span>
                                         @enderror
@@ -83,8 +83,8 @@
                                     <div class="col-6">
                                         <label for="location">Apellido</label>
                                         <input type="text" name="last_name" id="last_name"
-                                            value="{{ old('last_name', auth()->user()->last_name) }}"
-                                            class="form-control">
+                                               value="{{ old('last_name', auth()->user()->last_name) }}"
+                                               class="form-control">
                                         @error('last_name')
                                             <span class="text-danger text-sm">{{ $message }}</span>
                                         @enderror
@@ -93,7 +93,7 @@
                                     <div class="col-6">
                                         <label for="phone">Telefono</label>
                                         <input type="text" name="phone" id="phone"
-                                            value="{{ old('phone', auth()->user()->phone) }}" class="form-control">
+                                               value="{{ old('phone', auth()->user()->phone) }}" class="form-control">
                                         @error('phone')
                                             <span class="text-danger text-sm">{{ $message }}</span>
                                         @enderror
@@ -112,7 +112,61 @@
                     </div>
                 </div>
             </form>
-        </div>
+
+            <div class="mb-5 row justify-content-center">
+                <div class="col-lg-9 col-12 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Two-Factor Authentication</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (session('status') == 'two-factor-authentication-enabled')
+                                <div class="mb-4 font-medium text-sm text-green-600">
+                                    Please finish configuring two factor authentication below.
+                                </div>
+                            @elseif (session('status') == 'two-factor-authentication-confirmed')
+                                <div class="mb-4 font-medium text-sm text-green-600">
+                                    Two factor authentication confirmed and enabled successfully.
+                                </div>
+                            @endif
+
+                            @if (!auth()->user()->two_factor_secret)
+                                <!-- Habilitar 2FA -->
+                                <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Enable Two-Factor Authentication</button>
+                                </form>
+                            @else
+                                <!-- Confirmar 2FA -->
+                                <form method="POST" action="{{ url('/user/confirmed-two-factor-authentication') }}">
+                                    @csrf
+                                    <div class="mb-3">
+                                        {!! auth()->user()->twoFactorQrCodeSvg() !!}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="code">Authentication Code</label>
+                                        <input id="code" name="code" type="text" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Confirm Two-Factor Authentication</button>
+                                </form>
+
+                                <!-- Deshabilitar 2FA -->
+                                <form method="POST" action="{{ url('/user/two-factor-authentication') }}" class="mt-3">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Disable Two-Factor Authentication</button>
+                                </form>
+
+                                <!-- Regenerar códigos de recuperación -->
+                                <form method="POST" action="{{ url('/user/two-factor-recovery-codes') }}" class="mt-3">
+                                    @csrf
+                                    <button type="submit" class="btn btn-secondary">Regenerate Recovery Codes</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
