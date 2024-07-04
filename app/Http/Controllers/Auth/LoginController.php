@@ -33,8 +33,12 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            if ($user->two_factor_secret) {
-                return redirect()->intended('two-factor-challenge');
+            if ($this->isTwoFactorAuthenticationEnabled($user)) {
+                Auth::logout();
+                $request->session()->put('login.id', $user->id);
+                $request->session()->put('login.remember', $request->boolean('remember'));
+
+                return redirect()->route('two-factor.login');
             }
 
             return redirect()->intended('/dashboard');
@@ -45,10 +49,20 @@ class LoginController extends Controller
         ])->withInput($request->only('email'));
     }
 
+    private function isTwoFactorAuthenticationEnabled($user): bool
+    {
+        return $user->two_factor_secret &&
+               $user->two_factor_confirmed_at &&
+               in_array(
+                   \Laravel\Fortify\TwoFactorAuthenticatable::class,
+                   class_uses_recursive($user)
+               );
+    }
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
