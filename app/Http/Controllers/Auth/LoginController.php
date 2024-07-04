@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-
 class LoginController extends Controller
 {
-
     /**
      * Show the form for creating a new resource.
      *
@@ -20,7 +18,6 @@ class LoginController extends Controller
         return view('auth.signin');
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -29,25 +26,24 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-
         $credentials = $request->only('email', 'password');
-
         $rememberMe = $request->rememberMe ? true : false;
 
         if (Auth::attempt($credentials, $rememberMe)) {
             $request->session()->regenerate();
 
+            $user = Auth::user();
+            if ($user->two_factor_secret) {
+                return redirect()->intended('two-factor-challenge');
+            }
+
             return redirect()->intended('/dashboard');
         }
-
-
 
         return back()->withErrors([
             'message' => 'Las Credenciales ingresadas son incorrectas.',
         ])->withInput($request->only('email'));
     }
-
-
 
     /**
      * Remove the specified resource from storage.

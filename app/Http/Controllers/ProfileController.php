@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        $user = User::find(Auth::id());
+        $user = Auth::user();
         return view('modules.users.profile', compact('user'));
     }
 
@@ -29,24 +29,12 @@ class ProfileController extends Controller
             'last_name.required' => 'Last name is required',
         ]);
 
+        $data = $request->only('name', 'last_name', 'email', 'phone', 'about');
         if ($request->hasFile('profile_photo')) {
-            $user->update([
-                'name' => $request->name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'about' => $request->about,
-                'profile_photo' => $request->file('profile_photo')->store('users', 'public/profile_photos'),
-            ]);
-        } else {
-            $user->update([
-                'name' => $request->name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'about' => $request->about,
-            ]);
+            $data['profile_photo'] = $request->file('profile_photo')->store('users', 'public/profile_photos');
         }
+
+        $user->update($data);
 
         return back()->with('success', 'Tu perfil ha sido actualizado.');
     }
@@ -66,15 +54,18 @@ class ProfileController extends Controller
 
     public function confirmTwoFactorAuthentication(Request $request)
     {
-        if ($request->input('code')) {
-            $user = $request->user();
-            $user->two_factor_confirmed_at = now();
-            $user->save();
+        $user = $request->user();
+        $provider = app(TwoFactorAuthenticationProvider::class);
+
+        if ($provider->verify(decrypt($user->two_factor_secret), $request->input('code'))) {
+            $user->forceFill([
+                'two_factor_confirmed_at' => now(),
+            ])->save();
 
             return back()->with('status', 'two-factor-authentication-confirmed');
         }
 
-        return back();
+        return back()->withErrors(['code' => 'El código de autenticación de dos factores proporcionado no es válido.']);
     }
 
     public function disableTwoFactorAuthentication(Request $request)
@@ -86,7 +77,7 @@ class ProfileController extends Controller
             'two_factor_confirmed_at' => null,
         ])->save();
 
-        return back();
+        return back()->with('status', 'two-factor-authentication-disabled');
     }
 
     public function regenerateRecoveryCodes(Request $request)
@@ -98,6 +89,6 @@ class ProfileController extends Controller
             })->all())),
         ])->save();
 
-        return back();
+        return back()->with('status', 'two-factor-recovery-codes-regenerated');
     }
 }

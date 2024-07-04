@@ -28,7 +28,7 @@
                                 <div class="col-sm-auto col-8 my-auto">
                                     <div class="h-100">
                                         <h5 class="mb-1 font-weight-bolder">
-                                            {{ auth()->user()->name }} {{ auth()-> user()->last_name }}
+                                            {{ auth()->user()->name }} {{ auth()->user()->last_name }}
                                         </h5>
                                         <p class="mb-0 font-weight-bold text-sm">
                                             {{ auth()->user()->last_name }}
@@ -51,13 +51,30 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+                        @if (session('status') == 'two-factor-authentication-enabled')
+                            <div class="alert alert-success" role="alert">
+                                La autenticación de dos factores ha sido habilitada. Por favor, termine de configurar la autenticación de dos factores a continuación.
+                            </div>
+                        @elseif (session('status') == 'two-factor-authentication-confirmed')
+                            <div class="alert alert-success" role="alert">
+                                La autenticación de dos factores ha sido confirmada y habilitada exitosamente.
+                            </div>
+                        @elseif (session('status') == 'two-factor-authentication-disabled')
+                            <div class="alert alert-success" role="alert">
+                                La autenticación de dos factores ha sido deshabilitada.
+                            </div>
+                        @elseif (session('status') == 'two-factor-recovery-codes-regenerated')
+                            <div class="alert alert-success" role="alert">
+                                Los códigos de recuperación de dos factores han sido regenerados.
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="mb-5 row justify-content-center">
                     <div class="col-lg-9 col-12 ">
                         <div class="card " id="basic-info">
                             <div class="card-header">
-                                <h5>Informacion Basica</h5>
+                                <h5>Información Básica</h5>
                             </div>
                             <div class="pt-0 card-body">
 
@@ -71,7 +88,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-6">
-                                        <label for="email">Correo Electronico</label>
+                                        <label for="email">Correo Electrónico</label>
                                         <input type="email" name="email" id="email"  readonly
                                                value="{{ old('email', auth()->user()->email) }}" class="form-control">
                                         @error('email')
@@ -81,7 +98,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="location">Apellido</label>
+                                        <label for="last_name">Apellido</label>
                                         <input type="text" name="last_name" id="last_name"
                                                value="{{ old('last_name', auth()->user()->last_name) }}"
                                                class="form-control">
@@ -91,7 +108,7 @@
                                     </div>
 
                                     <div class="col-6">
-                                        <label for="phone">Telefono</label>
+                                        <label for="phone">Teléfono</label>
                                         <input type="text" name="phone" id="phone"
                                                value="{{ old('phone', auth()->user()->phone) }}" class="form-control">
                                         @error('phone')
@@ -100,7 +117,7 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <label for="about">Sobre Mi</label>
+                                    <label for="about">Sobre Mí</label>
                                     <textarea name="about" id="about" rows="5" class="form-control">{{ old('about', auth()->user()->about) }}</textarea>
                                     @error('about')
                                         <span class="text-danger text-sm">{{ $message }}</span>
@@ -117,26 +134,10 @@
                 <div class="col-lg-9 col-12 ">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Two-Factor Authentication</h5>
+                            <h5>Autenticación de Dos Factores</h5>
                         </div>
                         <div class="card-body">
-                            @if (session('status') == 'two-factor-authentication-enabled')
-                                <div class="mb-4 font-medium text-sm text-green-600">
-                                    Please finish configuring two factor authentication below.
-                                </div>
-                            @elseif (session('status') == 'two-factor-authentication-confirmed')
-                                <div class="mb-4 font-medium text-sm text-green-600">
-                                    Two factor authentication confirmed and enabled successfully.
-                                </div>
-                            @endif
-
-                            @if (!auth()->user()->two_factor_secret)
-                                <!-- Habilitar 2FA -->
-                                <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary">Enable Two-Factor Authentication</button>
-                                </form>
-                            @else
+                            @if (auth()->user()->two_factor_secret)
                                 <!-- Confirmar 2FA -->
                                 <form method="POST" action="{{ url('/user/confirmed-two-factor-authentication') }}">
                                     @csrf
@@ -144,23 +145,32 @@
                                         {!! auth()->user()->twoFactorQrCodeSvg() !!}
                                     </div>
                                     <div class="mb-3">
-                                        <label for="code">Authentication Code</label>
+                                        <label for="code">Código de Autenticación</label>
                                         <input id="code" name="code" type="text" class="form-control" required>
+                                        @error('code')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Confirm Two-Factor Authentication</button>
+                                    <button type="submit" class="btn btn-primary">Confirmar Autenticación de Dos Factores</button>
                                 </form>
 
                                 <!-- Deshabilitar 2FA -->
                                 <form method="POST" action="{{ url('/user/two-factor-authentication') }}" class="mt-3">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Disable Two-Factor Authentication</button>
+                                    <button type="submit" class="btn btn-danger">Deshabilitar Autenticación de Dos Factores</button>
                                 </form>
 
                                 <!-- Regenerar códigos de recuperación -->
                                 <form method="POST" action="{{ url('/user/two-factor-recovery-codes') }}" class="mt-3">
                                     @csrf
-                                    <button type="submit" class="btn btn-secondary">Regenerate Recovery Codes</button>
+                                    <button type="submit" class="btn btn-secondary">Regenerar Códigos de Recuperación</button>
+                                </form>
+                            @else
+                                <!-- Habilitar 2FA -->
+                                <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Habilitar Autenticación de Dos Factores</button>
                                 </form>
                             @endif
                         </div>
