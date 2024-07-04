@@ -218,3 +218,17 @@ Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 've
 Route::post('/email/resend', [EmailVerificationController::class, 'resend'])
     ->middleware(['auth', 'throttle:6,1'])
     ->name('verification.resend');
+
+
+//Verificar vistas de error
+Route::get('/force-error-500', function () {
+    abort(500);
+});
+
+Route::get('/force-error-503', function () {
+    abort(503);
+});
+
+Route::get('/force-error-403', function () {
+    abort(403);
+});
