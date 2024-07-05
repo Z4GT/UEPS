@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->float('budget');
+            $table->string('image')->nullable();
             $table->timestamps();
 
             // Índices adicionales

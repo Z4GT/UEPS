@@ -36,7 +36,31 @@
                         <div class="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-p-5">
                             <div
                                 class="tw-flex tw-items-center tw-justify-between tw-flex-column tw-flex-wrap md:tw-flex-row tw-space-y-4 md:tw-space-y-0 tw-pb-4 tw-bg-white dark:tw-bg-gray-900">
-
+                                <div class="d-flex flex-row justify-content-start">
+                                    <div class="dropdown mr-3">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Acción
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Generar
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                            <a class="dropdown-item" href="{{ route('students.pdf') }}"
+                                                id="excel">PDF</a>
+                                            <a class="dropdown-item" href="{{ route('students.download-excel') }}"
+                                                id="xls">Excel</a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <label for="table-search" class="tw-sr-only">Buscar</label>
                                 <div class="tw-relative">
                                     <div
@@ -122,7 +146,8 @@
     </main>
 
     <!-- Modal para ver cambios -->
-    <div class="modal fade" id="changesModal" tabindex="-1" aria-labelledby="changesModalLabel" aria-hidden="true">
+    <div class="modal fade" id="changesModal" tabindex="-1" aria-labelledby="changesModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

@@ -15,7 +15,7 @@ class Project extends Model implements Auditable
     public $incrementing = false;
 
     protected $fillable = [
-        'id_pro', 'id_responsible', 'name', 'description', 'status', 'progress', 'start_date', 'end_date', 'budget'
+        'id_pro', 'id_responsible', 'name', 'description', 'status', 'progress', 'start_date', 'end_date', 'budget', 'image',
     ];
 
     public function responsible()

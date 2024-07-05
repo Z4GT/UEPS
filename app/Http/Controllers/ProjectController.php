@@ -18,6 +18,13 @@ class ProjectController extends Controller
         return view('modules.projects.index', compact('projects', 'responsibles'));
     }
 
+    public function list()
+    {
+        $projects = Project::with('responsible')->get();
+        $responsibles = Responsible::all();
+        return view('modules.projects.list', compact('projects', 'responsibles'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -29,11 +36,14 @@ class ProjectController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'budget' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $lastProject = Project::orderBy('created_at', 'desc')->first();
         $lastIdNumber = $lastProject ? intval(substr($lastProject->id_pro, 5)) : 0;
         $newIdNumber = str_pad($lastIdNumber + 1, 4, '0', STR_PAD_LEFT);
+
+        $imagePath = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
 
         Project::create([
             'id_pro' => 'PROJ-' . $newIdNumber,
@@ -45,6 +55,7 @@ class ProjectController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'budget' => $request->budget,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('projects.index')->with('success', 'Proyecto creado correctamente.');
@@ -65,6 +76,8 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
+        $imagePath = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
+
         $request->validate([
             'id_responsible' => 'required|string|max:255',
             'name' => 'required|string|max:255',
@@ -74,6 +87,7 @@ class ProjectController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'budget' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $project = Project::findOrFail($id);
