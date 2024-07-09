@@ -28,11 +28,20 @@ class ForgotPasswordController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            return response()->json([
-                'success' => true,
-                'security_question' => $user->securityQuestion->question,
-                'email' => $request->email
-            ]);
+            $securityQuestion = $user->securityQuestion;
+
+            if ($securityQuestion) {
+                return response()->json([
+                    'success' => true,
+                    'security_question' => $securityQuestion->pregunta,
+                    'email' => $request->email
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Este usuario no tiene una pregunta de seguridad asociada.'
+                ]);
+            }
         }
 
         return response()->json([

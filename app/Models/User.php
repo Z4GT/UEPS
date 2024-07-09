@@ -73,4 +73,8 @@ class User extends Authenticatable implements MustVerifyEmail, Auditable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+    public function securityQuestion()
+    {
+        return $this->belongsTo(SecurityQuestion::class, 'security_question_id');
+    }
 }
