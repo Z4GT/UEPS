@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
-
     public function create(Request $request)
     {
         return view('auth.passrecover.reset-password', ['request' => $request]);
@@ -25,9 +24,9 @@ class ResetPasswordController extends Controller
             'password' => 'required|string|confirmed|min:8',
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
+        // Intentamos restablecer la contraseña del usuario. Si tiene éxito, actualizamos
+        // la contraseña en el modelo del usuario y lo persistimos en la base de datos.
+        // De lo contrario, analizamos el error y devolvemos la respuesta.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
@@ -40,9 +39,9 @@ class ResetPasswordController extends Controller
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
+        // Si la contraseña se restableció correctamente, redirigimos al usuario
+        // a la vista de inicio autenticada de la aplicación. Si hay un error,
+        // lo redirigimos de vuelta a donde vinieron con su mensaje de error.
         return $status == Password::PASSWORD_RESET
             ? redirect()->route('sign-in')->with('status', __($status))
             : back()->withInput($request->only('email'))

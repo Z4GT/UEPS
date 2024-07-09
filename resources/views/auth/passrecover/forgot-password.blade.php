@@ -88,6 +88,30 @@
                                         })
                                         .catch(error => console.error('Error:', error));
                                     });
+
+                                    document.getElementById('security-question-form').addEventListener('submit', function(event) {
+                                        event.preventDefault();
+                                        const email = document.getElementById('email-hidden').value;
+                                        const security_answer = document.getElementById('security_answer').value;
+                                    
+                                        fetch('{{ route('password.question.verify') }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                            },
+                                            body: JSON.stringify({ email: email, security_answer: security_answer })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                window.location.href = data.reset_url;
+                                            } else {
+                                                alert(data.error);
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                    });
                                     </script>
                                 </div>
                             </div>

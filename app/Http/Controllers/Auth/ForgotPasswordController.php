@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
@@ -17,10 +18,6 @@ class ForgotPasswordController extends Controller
 
     public function store(Request $request)
     {
-        if (config('app.is_demo')) {
-            return back()->with('error', "You are in a demo version, resetting password is disabled.");
-        }
-
         $request->validate([
             'email' => 'required|email',
         ]);
@@ -60,9 +57,12 @@ class ForgotPasswordController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && Hash::check($request->security_answer, $user->security_answer)) {
+            // Generate a password reset token
+            $token = Password::createToken($user);
+
             return response()->json([
                 'success' => true,
-                'reset_url' => route('password.reset', ['email' => $request->email])
+                'reset_url' => url(route('password.reset', ['token' => $token, 'email' => $request->email], false))
             ]);
         }
 
