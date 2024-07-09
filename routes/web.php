@@ -97,20 +97,26 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.request');
+// Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])
+//     ->middleware('guest')
+//     ->name('password.request');
 
-Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
+// Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])
+//     ->middleware('guest')
+//     ->name('password.email');
 
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.reset');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('guest')->name('password.email');
+Route::post('/forgot-password/question', [ForgotPasswordController::class, 'verifySecurityQuestion'])->middleware('guest')->name('password.question.verify');
 
-Route::post('/reset-password', [ResetPasswordController::class, 'store'])
-    ->middleware('guest');
+// Route::get('/reset-password/{token}', [ResetPasswordController::class, 'create'])
+//     ->middleware('guest')
+//     ->name('password.reset');
+
+// Route::post('/reset-password', [ResetPasswordController::class, 'store'])
+//     ->middleware('guest');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->middleware('guest')->name('password.update');
 
 
 Route::get('/proyectos', function () {

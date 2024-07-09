@@ -46,6 +46,49 @@
                                             <button type="submit" class="my-4 mb-2 btn btn-dark btn-lg w-100" style="background-color:#84be51!important; border-color:#84be51; " >Recuperar mi contraseña</button>
                                         </div>
                                     </form>
+                                    <form id="security-question-form" method="POST" action="{{ route('password.question.verify') }}" style="display:none;">
+                                        @csrf
+                                        <input type="hidden" name="email" id="email-hidden">
+                                    
+                                        <div class="form-group">
+                                            <label for="security_question">Pregunta de seguridad</label>
+                                            <input type="text" class="form-control" id="security_question" name="security_question" readonly>
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="security_answer">Respuesta</label>
+                                            <input type="text" class="form-control" id="security_answer" name="security_answer" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Verificar respuesta</button>
+                                    </form>
+                                    
+                                    <script>
+                                    document.getElementById('email-form').addEventListener('submit', function(event) {
+                                        event.preventDefault();
+                                        const email = document.getElementById('email').value;
+                                    
+                                        fetch('{{ route('password.email') }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                            },
+                                            body: JSON.stringify({ email: email })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                document.getElementById('email-hidden').value = email;
+                                                document.getElementById('security_question').value = data.security_question;
+                                                document.getElementById('email-form').style.display = 'none';
+                                                document.getElementById('security-question-form').style.display = 'block';
+                                            } else {
+                                                alert(data.error);
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                    });
+                                    </script>
                                 </div>
                             </div>
                         </div>
