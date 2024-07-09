@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
+use App\Models\SecurityQuestion;
 
 class RegisterController extends Controller
 {
@@ -29,6 +30,13 @@ class RegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    protected function showRegistrationForm()
+    {
+        $securityQuestions = SecurityQuestion::all();
+        return view('auth.signup', compact('securityQuestions'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -36,6 +44,8 @@ class RegisterController extends Controller
             'last_name' => 'required|min:3|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:7|max:255',
+            'security_question_id' => 'required|exists:security_questions,id',
+            'security_answer' => 'required|string|max:255',
         ], [
             'name.required' => 'El nombre es obligatorio',
             'name.min' => 'El nombre debe tener al menos 3 caracteres',
@@ -57,6 +67,8 @@ class RegisterController extends Controller
             'email' => $request->email,
             'last_name' => $request->last_name,
             'password' => Hash::make($request->password),
+            'security_question_id' => $request->security_question_id,
+            'security_answer' => Hash::make($request->security_answer),
         ]);
         event(new Registered($user));
 
@@ -65,4 +77,7 @@ class RegisterController extends Controller
 
         return redirect('/email/verify');
     }
+    // app/Http/Controllers/Auth/RegisterController.php
+
+
 }

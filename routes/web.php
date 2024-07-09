@@ -68,11 +68,18 @@ Route::get('/signin', function () {
     return view('account-pages.signin');
 })->name('signin');
 
-Route::get('/signup', function () {
-    return view('account-pages.signup');
-})->name('signup')->middleware('guest');
+// Route::get('/signup', function () {
+//     return view('account-pages.signup');
+// })->name('signup')->middleware('guest');
 
-Route::get('/sign-up', [RegisterController::class, 'create'])
+// Route::get('/sign-up', [RegisterController::class, 'create'])
+//     ->middleware('guest')
+//     ->name('sign-up');
+
+// Route::post('/sign-up', [RegisterController::class, 'store'])
+//     ->middleware('guest');
+
+Route::get('/sign-up', [RegisterController::class, 'showRegistrationForm', 'create'])
     ->middleware('guest')
     ->name('sign-up');
 

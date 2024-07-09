@@ -64,6 +64,19 @@
                                                 <span class="text-danger text-sm">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        <div class="form-group">
+                                            <label for="security_question_id">Pregunta de seguridad</label>
+                                            <select class="form-control" id="security_question_id" name="security_question_id" required>
+                                                @foreach($securityQuestions as $question)
+                                                    <option value="{{ $question->id }}">{{ $question->question }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="security_answer">Respuesta</label>
+                                            <input type="text" class="form-control" id="security_answer" name="security_answer" required>
+                                        </div>
                                         <div class="text-center">
                                             <button type="submit"
                                                 class="btn btn-dark w-100 mt-4 mb-3"  style="background-color:#84be51!important; border-color:#84be51; ">Registrarse</button>
