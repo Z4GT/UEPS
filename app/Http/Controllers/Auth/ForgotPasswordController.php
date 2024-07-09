@@ -30,7 +30,7 @@ class ForgotPasswordController extends Controller
             if ($securityQuestion) {
                 return response()->json([
                     'success' => true,
-                    'security_question' => $securityQuestion->pregunta,
+                    'security_question' => $securityQuestion->question,
                     'email' => $request->email
                 ]);
             } else {
