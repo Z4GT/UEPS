@@ -36,6 +36,9 @@
                                             @error('name')
                                                 <span class="text-danger text-sm">{{ $message }}</span>
                                             @enderror
+                                            @error('integer')
+                                                <span class="text-danger text-sm">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <label style="color:#4a59a4!important;">Apellido</label>
                                         <div class="mb-3">
@@ -43,6 +46,9 @@
                                                 placeholder="Escriba su apellido" value="{{ old('last_name') }}"
                                                 aria-label="Last-Name" aria-describedby="name-addon">
                                             @error('last_name')
+                                                <span class="text-danger text-sm">{{ $message }}</span>
+                                            @enderror
+                                            @error('string')
                                                 <span class="text-danger text-sm">{{ $message }}</span>
                                             @enderror
                                         </div>
