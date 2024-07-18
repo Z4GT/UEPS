@@ -18,7 +18,7 @@ class StudentController extends Controller
         $sortDirection = $request->get('direction', 'asc'); // Dirección por defecto
 
         // Validar los campos de ordenamiento para evitar inyecciones SQL
-        $validSortFields = ['id_stud', 'card_id', 'name', 'last_name', 'course', 'hours', 'status'];
+        $validSortFields = ['id_stud', 'card_id', 'name', 'last_name', 'status'];
         if (!in_array($sortField, $validSortFields)) {
             $sortField = 'id_stud';
         }
@@ -34,8 +34,6 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'card_id' => 'required|string|max:10|unique:students',
             'last_name' => 'required|string|max:255',
-            'course' => 'required|string|max:255',
-            'hours' => 'required|numeric',
             'status' => 'required|boolean',
         ]);
 
@@ -64,8 +62,6 @@ class StudentController extends Controller
             'card_id' => $request->card_id,
             'name' => $request->name,
             'last_name' => $request->last_name,
-            'course' => $request->course,
-            'hours' => $request->hours,
             'status' => $request->status,
         ]);
 
@@ -79,8 +75,6 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'card_id' => 'required|string|max:10',
             'last_name' => 'required|string|max:255',
-            'course' => 'required|string|max:255',
-            'hours' => 'required|numeric',
             'status' => 'required|boolean',
         ]);
 

@@ -22,10 +22,12 @@
                                 class="btn btn-dark btn-primary mr-3">
                                 <i class="fas fa-file-text me-2"></i> Reporte
                             </a>
-                            <button type="button" class="btn btn-dark btn-primary mr-3" data-bs-toggle="modal"
-                                data-bs-target="#editProjectModal" data-project="{{ json_encode($project) }}">
-                                <i class="fas fa-pencil me-2"></i> Editar proyecto
-                            </button>
+                            @role('rector')
+                                <button type="button" class="btn btn-dark btn-primary mr-3" data-bs-toggle="modal"
+                                    data-bs-target="#editProjectModal" data-project="{{ json_encode($project) }}">
+                                    <i class="fas fa-pencil me-2"></i> Editar proyecto
+                                </button>
+                            @endrole
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -129,10 +131,12 @@
                                                     onclick="filterTasks('Pendiente')">Pendientes</a>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-success mr-3" data-bs-toggle="modal"
-                                            data-bs-target="#createTaskModal">
-                                            <i class="fas fa-plus me-2"></i> Agregar tarea
-                                        </button>
+                                        @role('rector')
+                                            <button type="button" class="btn btn-success mr-3" data-bs-toggle="modal"
+                                                data-bs-target="#createTaskModal">
+                                                <i class="fas fa-plus me-2"></i> Agregar tarea
+                                            </button>
+                                        @endrole
 
                                     </div>
                                     <div class="container">
@@ -191,11 +195,12 @@
 
                                 <div id="kardex-content" class="tab-pane contents">
                                     <div class="d-flex justify-content-end ">
-
-                                        <button type="button" class="btn btn-success mr-3 mb-2"
-                                            data-bs-toggle="modal" data-bs-target="#createKardexModal">
-                                            <i class="fas fa-plus me-2"></i> Agregar registro
-                                        </button>
+                                        @role('rector')
+                                            <button type="button" class="btn btn-success mr-3 mb-2"
+                                                data-bs-toggle="modal" data-bs-target="#createKardexModal">
+                                                <i class="fas fa-plus me-2"></i> Agregar registro
+                                            </button>
+                                        @endrole
                                     </div>
                                     @if ($project->kardex->isEmpty())
                                         <div class="col-12">
@@ -208,12 +213,13 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                     <tr>
+                                                        <th>Fecha</th>
                                                         <th>ID</th>
                                                         <th>Operacion</th>
                                                         <th>Bodega</th>
                                                         <th>Item</th>
                                                         <th>Detalle</th>
-                                                        <th>Fecha</th>
+
                                                         <th>Cantidad</th>
                                                         <th>Precio</th>
                                                         <th>Balance</th>
@@ -222,15 +228,13 @@
                                                 <tbody>
                                                     @foreach ($project->kardex as $kardex)
                                                         <tr>
+                                                            <td>{{ \Carbon\Carbon::parse($kardex->date)->format('d-m-Y') }}
+                                                            </td>
                                                             <td>{{ $kardex->id_kardex }}</td>
                                                             <td>{{ $kardex->operationType->name }}</td>
                                                             <td>{{ $kardex->warehouse->name }}</td>
                                                             <td>{{ $kardex->item->name }}</td>
                                                             <td>{{ $kardex->detail }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($kardex->date)->format('d-m-Y') }}
-                                                            </td>
-
-
                                                             <td>{{ $kardex->quantity }}</td>
                                                             <td>${{ $kardex->price }}</td>
                                                             <td>${{ $kardex->balance }}</td>
@@ -243,10 +247,12 @@
                                 </div>
                                 <div id="inventory-content" class="tab-pane mt-0 contents">
                                     <div class="d-flex justify-content-end mt-0">
-                                        <button type="button" class="btn btn-success mr-3 mb-2"
-                                            data-bs-toggle="modal" data-bs-target="#createItemModal">
-                                            <i class="fas fa-plus me-2"></i> Agregar item
-                                        </button>
+                                        @role('rector')
+                                            <button type="button" class="btn btn-success mr-3 mb-2"
+                                                data-bs-toggle="modal" data-bs-target="#createItemModal">
+                                                <i class="fas fa-plus me-2"></i> Agregar item
+                                            </button>
+                                        @endrole
                                     </div>
                                     @if ($project->items->isEmpty())
                                         <div class="col-12">

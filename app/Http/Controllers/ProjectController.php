@@ -30,7 +30,11 @@ class ProjectController extends Controller
             ->orderBy($sortField, $sortDirection)
             ->get();
 
-        $responsibles = Responsible::where('status', true)->get();
+
+        $responsibles = Responsible::where('status', true) //solo responsables activos y con una cuenta de usuario
+            ->whereNotNull('id_user')
+            ->get();
+
         $modules = Module::where('status', true)->get(); // Solo módulos activos
 
         return view('modules.projects.index', compact('projects', 'responsibles', 'modules', 'sortField', 'sortDirection'));
@@ -40,7 +44,11 @@ class ProjectController extends Controller
     public function list()
     {
         $projects = Project::with('responsible')->get();
-        $responsibles = Responsible::all();
+
+        $responsibles = Responsible::where('status', true)
+            ->whereNotNull('id_user')
+            ->get();
+
         $modules = Module::where('status', true)->get();
         return view('modules.projects.list', compact('projects', 'responsibles', 'modules'));
     }
@@ -135,7 +143,11 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::findOrFail($id);
-        $responsibles = Responsible::where('status', true)->get();
+
+        $responsibles = Responsible::where('status', true)
+            ->whereNotNull('id_user')
+            ->get();
+
         $modules = Module::where('status', true)->get(); // Solo módulos activos
         $items = Item::all();
         $categoriesItem = CategoryItem::all();

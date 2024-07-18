@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Kardex;
+use App\Models\Project;
+use Illuminate\Support\Facades\Route;
 
 class KardexObserver
 {
@@ -14,9 +16,20 @@ class KardexObserver
         //
     }
 
-    public function creating(Kardex $kardex):void{
-        
-    }
+    // public function creating(Kardex $kardex)
+    // {
+    //     // Asignar id_pro basado en la ruta actual
+    //     $route = Route::current();
+    //     if ($route && $route->getName() === 'projects.show') {
+    //         $projectId = $route->parameter('id');
+    //         if ($projectId) {
+    //             $project = Project::find($projectId);
+    //             if ($project) {
+    //                 $kardex->id_pro = $project->id_pro;
+    //             }
+    //         }
+    //     }
+    // }
 
     /**
      * Handle the Kardex "updated" event.

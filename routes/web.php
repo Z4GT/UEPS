@@ -125,98 +125,73 @@ Route::middleware(['throttle:login_attempts'])->group(function () {
 
 
 Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
-    // Rutas de administrador
-    Route::group(['middleware' => ['role:administrador']], function () {
 
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-        Route::view('/info', 'info')->name('info');
-
-        // Usuarios
-        Route::resource('/info/users', UserController::class);
-        Route::delete('/info/selected-users', [UserController::class, 'deleteAll'])->name('user.delete');
-        Route::patch('/info/selected-users/deactivate', [UserController::class, 'deactivateAll'])->name('user.deactivate');
-        Route::get('/users/pdf', [UserController::class, 'generatePDF'])->name('users.pdf');
-        Route::get('/users/export-excel', [UserController::class, 'exportExcel'])->name('users.download-excel');
+    //rutas de todos excepto auditor
+    Route::group(['middleware' => ['role:administrador|coordinador|rector']], function () {
 
         // Estudiantes
         Route::resource('/info/students', StudentController::class);
-        Route::delete('/info/selected-students', [StudentController::class, 'deleteAll'])->name('student.delete');
-        Route::patch('/info/selected-students/deactivate', [StudentController::class, 'deactivateAll'])->name('student.deactivate');
         Route::get('/students/pdf', [StudentController::class, 'generatePDF'])->name('students.pdf');
         Route::get('/students/export-excel', [StudentController::class, 'exportExcel'])->name('students.download-excel');
         Route::get('/info/students/{id_stud}/modules', [StudentController::class, 'getModules'])->name('students.getModules');
 
         // Periodos
         Route::resource('/info/periods', PeriodController::class);
-        Route::delete('/info/selected-periods', [PeriodController::class, 'deleteAll'])->name('period.delete');
         Route::get('/periods/pdf', [PeriodController::class, 'generatePDF'])->name('periods.pdf');
         Route::get('/periods/export-excel', [PeriodController::class, 'exportExcel'])->name('periods.download-excel');
 
         // Categorías de Bodega
         Route::resource('/info/categories_warehouse', CategoriesWarehouseController::class);
-        Route::delete('/info/selected-categories-warehouse', [CategoriesWarehouseController::class, 'deleteAll'])->name('category_warehouse.delete');
         Route::get('/categories_warehouse/pdf', [CategoriesWarehouseController::class, 'generatePDF'])->name('categories_warehouse.pdf');
         Route::get('/categories_warehouse/export-excel', [CategoriesWarehouseController::class, 'exportExcel'])->name('categories_warehouse.download-excel');
 
         // Bodegas
         Route::resource('/info/warehouses', WarehouseController::class);
-        Route::delete('/info/selected-warehouses', [WarehouseController::class, 'deleteAll'])->name('warehouse.delete');
         Route::get('/warehouses/pdf', [WarehouseController::class, 'generatePDF'])->name('warehouses.pdf');
         Route::get('/warehouses/export-excel', [WarehouseController::class, 'exportExcel'])->name('warehouses.download-excel');
 
         // Responsables
         Route::resource('/info/responsibles', ResponsibleController::class);
-        Route::delete('/info/selected-responsibles', [ResponsibleController::class, 'deleteAll'])->name('responsible.delete');
-        Route::patch('/info/selected-responsibles/deactivate', [ResponsibleController::class, 'deactivateAll'])->name('responsible.deactivate');
         Route::get('/responsibles/pdf', [ResponsibleController::class, 'generatePDF'])->name('responsibles.pdf');
         Route::get('/responsibles/export-excel', [ResponsibleController::class, 'exportExcel'])->name('responsibles.download-excel');
 
         // Módulos
         Route::resource('/info/modules', ModuleController::class);
-        Route::delete('/info/selected-modules', [ModuleController::class, 'deleteAll'])->name('module.delete');
-        Route::patch('/info/selected-modules/deactivate', [ModuleController::class, 'deactivateAll'])->name('module.deactivate');
         Route::get('/modules/pdf', [ModuleController::class, 'generatePDF'])->name('modules.pdf');
         Route::get('/modules/export-excel', [ModuleController::class, 'exportExcel'])->name('modules.download-excel');
         Route::get('/modules/{module}/students', [ModuleController::class, 'getStudents'])->name('modules.getStudents');
 
         // Categorías de Ítems
         Route::resource('/info/categories_items', CategoryItemController::class);
-        Route::delete('/info/selected-categories-items', [CategoryItemController::class, 'deleteAll'])->name('category_item.delete');
         Route::get('/categories_items/pdf', [CategoryItemController::class, 'generatePDF'])->name('categories_items.pdf');
         Route::get('/categories_items/export-excel', [CategoryItemController::class, 'exportExcel'])->name('categories_items.download-excel');
 
         // Unidades de Medida
         Route::resource('/info/measurement_units', MeasurementUnitController::class);
-        Route::delete('/info/selected-measurement-units', [MeasurementUnitController::class, 'deleteAll'])->name('measurement_unit.delete');
         Route::get('/measurement_units/pdf', [MeasurementUnitController::class, 'generatePDF'])->name('measurement_units.pdf');
         Route::get('/measurement_units/export-excel', [MeasurementUnitController::class, 'exportExcel'])->name('measurement_units.download-excel');
 
         // Tipos de Operaciones
         Route::resource('/info/operations', OperationTypeController::class);
-        Route::delete('/info/selected-operations', [OperationTypeController::class, 'deleteAll'])->name('operation.delete');
         Route::get('/operations/pdf', [OperationTypeController::class, 'generatePDF'])->name('operations.pdf');
         Route::get('/operations/export-excel', [OperationTypeController::class, 'exportExcel'])->name('operations.download-excel');
 
+
+        Route::view('/info', 'info')->name('info');
+
         // Proyectos
         Route::resource('/info/projects', ProjectController::class);
-        Route::delete('/info/selected-projects', [ProjectController::class, 'deleteAll'])->name('project.delete');
         Route::get('/projects/pdf', [ProjectController::class, 'generatePDF'])->name('projects.pdf');
         Route::get('/projects/export-excel', [ProjectController::class, 'exportExcel'])->name('projects.download-excel');
-        Route::get('/projects', [ProjectController::class, 'list'])->name('projects.list');
-        Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
-        Route::get('projects/export-individual/{id}', [ProjectController::class, 'exportIndividualExcel'])->name('projects.exportIndividualExcel');
 
 
         // Tareas
         Route::resource('/info/tasks', TaskController::class);
-        Route::delete('/info/selected-tasks', [TaskController::class, 'deleteAll'])->name('task.delete');
         Route::get('/tasks/pdf', [TaskController::class, 'generatePDF'])->name('tasks.pdf');
         Route::get('/tasks/export-excel', [TaskController::class, 'exportExcel'])->name('tasks.download-excel');
 
         // Items
         Route::resource('/info/items', ItemController::class);
-        Route::delete('/info/selected-items', [ItemController::class, 'deleteAll'])->name('item.delete');
         Route::get('/items/pdf', [ItemController::class, 'generatePDF'])->name('items.pdf');
         Route::get('/items/export-excel', [ItemController::class, 'exportExcel'])->name('items.download-excel');
         Route::get('/items/{id}/tags', [ItemController::class, 'getTags']);
@@ -224,16 +199,123 @@ Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
 
         // Kardex
         Route::resource('/info/kardex', KardexController::class);
-        Route::delete('/info/selected-kardex', [KardexController::class, 'deleteAll'])->name('kardex.delete');
         Route::get('/kardex/pdf', [KardexController::class, 'generatePDF'])->name('kardex.pdf');
         Route::get('/kardex/export-excel', [KardexController::class, 'exportExcel'])->name('kardex.download-excel');
     });
+
+    // Rutas de administrador
+    Route::group(['middleware' => ['role:administrador']], function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+        // Usuarios
+        Route::resource('/info/users', UserController::class);
+        Route::get('/users/pdf', [UserController::class, 'generatePDF'])->name('users.pdf');
+        Route::get('/users/export-excel', [UserController::class, 'exportExcel'])->name('users.download-excel');
+        Route::delete('/info/selected-users', [UserController::class, 'deleteAll'])->name('user.delete');
+        Route::patch('/info/selected-users/deactivate', [UserController::class, 'deactivateAll'])->name('user.deactivate');
+
+        //Estudiantes
+        Route::delete('/info/selected-students', [StudentController::class, 'deleteAll'])->name('student.delete');
+        Route::patch('/info/selected-students/deactivate', [StudentController::class, 'deactivateAll'])->name('student.deactivate');
+
+        //Periodos
+        Route::delete('/info/selected-periods', [PeriodController::class, 'deleteAll'])->name('period.delete');
+
+        //Categorias de bodega
+        Route::delete('/info/selected-categories-warehouse', [CategoriesWarehouseController::class, 'deleteAll'])->name('category_warehouse.delete');
+
+        //Bodegas
+        Route::delete('/info/selected-warehouses', [WarehouseController::class, 'deleteAll'])->name('warehouse.delete');
+
+        //Responsable
+        Route::delete('/info/selected-responsibles', [ResponsibleController::class, 'deleteAll'])->name('responsible.delete');
+        Route::patch('/info/selected-responsibles/deactivate', [ResponsibleController::class, 'deactivateAll'])->name('responsible.deactivate');
+
+        //Modulos
+        Route::delete('/info/selected-modules', [ModuleController::class, 'deleteAll'])->name('module.delete');
+        Route::patch('/info/selected-modules/deactivate', [ModuleController::class, 'deactivateAll'])->name('module.deactivate');
+
+        //Categorias de items
+        Route::delete('/info/selected-categories-items', [CategoryItemController::class, 'deleteAll'])->name('category_item.delete');
+
+        //Unidades de medida
+        Route::delete('/info/selected-measurement-units', [MeasurementUnitController::class, 'deleteAll'])->name('measurement_unit.delete');
+
+        //Tipos de operaciones
+        Route::delete('/info/selected-operations', [OperationTypeController::class, 'deleteAll'])->name('operation.delete');
+    });
+
+    // Rutas de rector y coordinador
+    Route::group(['middleware' => ['role:rector|coordinador']], function () {
+
+        //Proyectos 
+        Route::get('/projects', [ProjectController::class, 'list'])->name('projects.list');
+        Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
+        Route::get('projects/export-individual/{id}', [ProjectController::class, 'exportIndividualExcel'])->name('projects.exportIndividualExcel');
+    });
+
+
+    // Rutas de rector
+    Route::group(['middleware' => ['role:rector']], function () {
+
+        //Proyectos
+        Route::delete('/info/selected-projects', [ProjectController::class, 'deleteAll'])->name('project.delete');
+
+        //Tareas
+        Route::delete('/info/selected-tasks', [TaskController::class, 'deleteAll'])->name('task.delete');
+
+        //Items
+        Route::delete('/info/selected-items', [ItemController::class, 'deleteAll'])->name('item.delete');
+
+        //Kardex
+        Route::delete('/info/selected-kardex', [KardexController::class, 'deleteAll'])->name('kardex.delete');
+    });
+
 
     // Rutas de auditor
     Route::group(['middleware' => ['role:auditor']], function () {
         Route::get('/audits', [AuditController::class, 'index'])->name('audits.index');
         Route::get('/audits/pdf', [AuditController::class, 'generatePDF'])->name('audits.pdf');
     });
+
+    // Route::group(['middleware' => ['role:administrador|coordinador']], function () {
+
+
+    //     Route::view('/info', 'info')->name('info');
+
+    //     // Proyectos
+    //     Route::resource('/info/projects', ProjectController::class);
+    //     Route::delete('/info/selected-projects', [ProjectController::class, 'deleteAll'])->name('project.delete');
+    //     Route::get('/projects/pdf', [ProjectController::class, 'generatePDF'])->name('projects.pdf');
+    //     Route::get('/projects/export-excel', [ProjectController::class, 'exportExcel'])->name('projects.download-excel');
+    //     Route::get('/projects', [ProjectController::class, 'list'])->name('projects.list');
+    //     Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
+    //     Route::get('projects/export-individual/{id}', [ProjectController::class, 'exportIndividualExcel'])->name('projects.exportIndividualExcel');
+
+
+    //     // Tareas
+    //     Route::resource('/info/tasks', TaskController::class);
+    //     Route::delete('/info/selected-tasks', [TaskController::class, 'deleteAll'])->name('task.delete');
+    //     Route::get('/tasks/pdf', [TaskController::class, 'generatePDF'])->name('tasks.pdf');
+    //     Route::get('/tasks/export-excel', [TaskController::class, 'exportExcel'])->name('tasks.download-excel');
+
+    //     // Items
+    //     Route::resource('/info/items', ItemController::class);
+    //     Route::delete('/info/selected-items', [ItemController::class, 'deleteAll'])->name('item.delete');
+    //     Route::get('/items/pdf', [ItemController::class, 'generatePDF'])->name('items.pdf');
+    //     Route::get('/items/export-excel', [ItemController::class, 'exportExcel'])->name('items.download-excel');
+    //     Route::get('/items/{id}/tags', [ItemController::class, 'getTags']);
+
+
+    //     // Kardex
+    //     Route::resource('/info/kardex', KardexController::class);
+    //     Route::delete('/info/selected-kardex', [KardexController::class, 'deleteAll'])->name('kardex.delete');
+    //     Route::get('/kardex/pdf', [KardexController::class, 'generatePDF'])->name('kardex.pdf');
+    //     Route::get('/kardex/export-excel', [KardexController::class, 'exportExcel'])->name('kardex.download-excel');
+    // });
+
 
     // Rutas compartidas
     Route::get('/info/users/{user}/roles', [UserController::class, 'getUserRoles']);

@@ -5,18 +5,26 @@
             <div class="mt-4 row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="pb-0 card-header">
+
+                        <div class="pb-2 card-header">
                             <div class="row">
                                 <div class="col-6">
-                                    <h5 class="">Administración de Proyectos</h5>
-                                    <p class="mb-0 text-sm">Aquí puedes gestionar los proyectos.</p>
+                                    @role('rector')
+                                        <h5 class="">Administración de Proyectos</h5>
+                                        <p class="mb-0 text-sm">Aquí puedes gestionar los proyectos.</p>
+                                    @else
+                                        <h5 class="">Proyectos</h5>
+                                        <p class="mb-0 text-sm">Aquí puedes visualizar los proyectos.</p>
+                                    @endrole
                                 </div>
-                                <div class="col-6 text-end">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                        data-bs-target="#createProjectModal">
-                                        <i class="fas fa-plus me-2"></i> Agregar proyecto
-                                    </button>
-                                </div>
+                                @role('rector')
+                                    <div class="col-6 text-end">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#createProjectModal">
+                                            <i class="fas fa-plus me-2"></i> Agregar proyecto
+                                        </button>
+                                    </div>
+                                @endrole
                             </div>
                         </div>
 
@@ -43,17 +51,19 @@
                             <div
                                 class="tw-flex tw-items-center tw-justify-between tw-pb-4 tw-bg-white dark:tw-bg-gray-900">
                                 <div class="d-flex flex-row justify-content-start">
-                                    <div class="dropdown mr-3">
-                                        <button class="btn btn-info dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            Acción
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
+                                    @role('rector')
+                                        <div class="dropdown mr-3">
+                                            <button class="btn btn-info dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                Acción
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="dropdown">
+                                    @endrole
+                                    <div class="dropdown mr-2">
                                         <button class="btn btn-info dropdown-toggle" type="button"
                                             id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
@@ -90,12 +100,14 @@
                                 <thead
                                     class="tw-text-xs tw-text-gray-700 tw-uppercase tw-bg-gray-50 dark:tw-bg-gray-700 dark:tw-text-gray-400">
                                     <tr>
-                                        <th scope="col" class="tw-p-4">
-                                            <div class="tw-flex tw-items-center">
-                                                <input id="select_all_ids" type="checkbox"
-                                                    class="tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
-                                            </div>
-                                        </th>
+                                        @role('rector')
+                                            <th scope="col" class="tw-p-4">
+                                                <div class="tw-flex tw-items-center">
+                                                    <input id="select_all_ids" type="checkbox"
+                                                        class="tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                                </div>
+                                            </th>
+                                        @endrole
                                         <th scope="col" class="tw-px-6 tw-py-3">
                                             <div class="tw-flex tw-items-center">
                                                 ID
@@ -178,7 +190,9 @@
                                             </div>
                                         </th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Módulos</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
+                                        @role('rector')
+                                            <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
+                                        @endrole
                                     </tr>
                                 </thead>
 
@@ -186,12 +200,14 @@
                                     @foreach ($projects as $project)
                                         <tr id="project_ids{{ $project->id_pro }}"
                                             class="tw-bg-white tw-border-b dark:tw-bg-gray-800 dark:tw-border-gray-700 hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
-                                            <td class="tw-w-4 tw-p-4">
-                                                <div class="tw-flex tw-items-center">
-                                                    <input type="checkbox" value="{{ $project->id_pro }}"
-                                                        class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
-                                                </div>
-                                            </td>
+                                            @role('rector')
+                                                <td class="tw-w-4 tw-p-4">
+                                                    <div class="tw-flex tw-items-center">
+                                                        <input type="checkbox" value="{{ $project->id_pro }}"
+                                                            class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                                    </div>
+                                                </td>
+                                            @endrole
                                             <td class="tw-px-6 tw-py-4">{{ $project->id_pro }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $project->name }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $project->responsible->name }}
@@ -257,46 +273,48 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
-                                                <a href="#"
-                                                    class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"
-                                                    data-bs-toggle="modal" data-bs-target="#editProjectModal"
-                                                    data-project-id="{{ $project->id_pro }}"
-                                                    data-project-name="{{ $project->name }}"
-                                                    data-project-responsible="{{ $project->id_responsible }}"
-                                                    data-project-description="{{ $project->description }}"
-                                                    data-project-status="{{ $project->status }}"
-                                                    data-project-progress="{{ $project->progress }}"
-                                                    data-project-start_date="{{ $project->start_date }}"
-                                                    data-project-end_date="{{ $project->end_date }}"
-                                                    data-project-budget="{{ $project->budget }}">
-                                                    <svg class="tw-w-6 tw-h-6 tw-text-gray-800 dark:tw-text-white"
-                                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                        width="24" height="24" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path fill-rule="evenodd"
-                                                            d="M14 4.182A4.136 4.136 0 0 1 16.9 3c1.087 0 2.13.425 2.899 1.182A4.01 4.01 0 0 1 21 7.037c0 1.068-.43 2.092-1.194 2.849L18.5 11.214l-5.8-5.71 1.287-1.31.012-.012Zm-2.717 2.763L6.186 12.13l2.175 2.141 5.063-5.218-2.141-2.108Zm-6.25 6.886-1.98 5.849a.992.992 0 0 0 .245 1.026 1.03 1.03 0 0 0 1.043.242L10.282 19l-5.25-5.168Zm6.954 4.01 5.096-5.186-2.218-2.183-5.063 5.218 2.185 2.15Z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </a>
-                                                <form action="{{ route('projects.destroy', $project->id_pro) }}"
-                                                    method="POST" style="display:inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="tw-font-medium tw-text-red-600 dark:tw-text-red-500 hover:tw-underline"
-                                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">
+                                            @role('rector')
+                                                <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
+                                                    <a href="#"
+                                                        class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"
+                                                        data-bs-toggle="modal" data-bs-target="#editProjectModal"
+                                                        data-project-id="{{ $project->id_pro }}"
+                                                        data-project-name="{{ $project->name }}"
+                                                        data-project-responsible="{{ $project->id_responsible }}"
+                                                        data-project-description="{{ $project->description }}"
+                                                        data-project-status="{{ $project->status }}"
+                                                        data-project-progress="{{ $project->progress }}"
+                                                        data-project-start_date="{{ $project->start_date }}"
+                                                        data-project-end_date="{{ $project->end_date }}"
+                                                        data-project-budget="{{ $project->budget }}">
                                                         <svg class="tw-w-6 tw-h-6 tw-text-gray-800 dark:tw-text-white"
                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                             width="24" height="24" fill="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path fill-rule="evenodd"
-                                                                d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                                                d="M14 4.182A4.136 4.136 0 0 1 16.9 3c1.087 0 2.13.425 2.899 1.182A4.01 4.01 0 0 1 21 7.037c0 1.068-.43 2.092-1.194 2.849L18.5 11.214l-5.8-5.71 1.287-1.31.012-.012Zm-2.717 2.763L6.186 12.13l2.175 2.141 5.063-5.218-2.141-2.108Zm-6.25 6.886-1.98 5.849a.992.992 0 0 0 .245 1.026 1.03 1.03 0 0 0 1.043.242L10.282 19l-5.25-5.168Zm6.954 4.01 5.096-5.186-2.218-2.183-5.063 5.218 2.185 2.15Z"
                                                                 clip-rule="evenodd" />
                                                         </svg>
-                                                    </button>
-                                                </form>
-                                            </td>
+                                                    </a>
+                                                    <form action="{{ route('projects.destroy', $project->id_pro) }}"
+                                                        method="POST" style="display:inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="tw-font-medium tw-text-red-600 dark:tw-text-red-500 hover:tw-underline"
+                                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">
+                                                            <svg class="tw-w-6 tw-h-6 tw-text-gray-800 dark:tw-text-white"
+                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                width="24" height="24" fill="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            @endrole
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -326,7 +344,6 @@
                 </div>
             </div>
         </div>
-        <x-app.footer />
     </main>
 
     <!-- Create Project Modal -->

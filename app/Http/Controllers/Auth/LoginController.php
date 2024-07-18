@@ -40,17 +40,19 @@ class LoginController extends Controller
             if ($user->roles->isEmpty()) {
                 Auth::logout();
                 return redirect('/sign-in')->with('error', 'Espera a que un administrador te asigne un rol.');
+            } else {
+                $redirectTo = '/';
             }
 
-            // Verificar si el usuario tiene roles específicos
-            if ($user->hasRole('administrador')) {
-                $redirectTo = '/dashboard';
-            } elseif ($user->hasRole('auditor')) {
-                $redirectTo = '/audits';
-            } else {
-                Auth::logout();
-                return redirect('/sign-in')->with('error', 'No tiene los permisos necesarios para acceder al sistema.');
-            }
+            // // Verificar si el usuario tiene roles específicos
+            // if ($user->hasRole('administrador')) {
+            //     $redirectTo = '/dashboard';
+            // } elseif ($user->hasRole('auditor')) {
+            //     $redirectTo = '/audits';
+            // } else {
+            //     Auth::logout();
+            //     return redirect('/sign-in')->with('error', 'No tiene los permisos necesarios para acceder al sistema.');
+            // }
 
             if ($user->two_factor_enabled) {
                 $token = (new Google2FA)->generateSecretKey();

@@ -13,13 +13,20 @@ return new class extends Migration
     {
         Schema::create('responsibles', function (Blueprint $table) {
             $table->string('id_responsible')->primary();
+            $table->bigInteger('id_user')->nullable();
             $table->string('card_id');
             $table->string('name');
             $table->string('last_name');
             $table->string('area');
-            $table->string('role'); 
+            $table->string('role');
             $table->boolean('status'); //activo o inactivo
             $table->timestamps();
+
+
+            $table->index('id_user');
+
+            // Relaciones
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

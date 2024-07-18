@@ -16,11 +16,8 @@ return new class extends Migration
             $table->string('card_id');
             $table->string('name');
             $table->string('last_name');
-            $table->string('course');
-            $table->float('hours');
             $table->boolean('status'); //activo o inactivo
             $table->timestamps();
-        
         });
     }
 

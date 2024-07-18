@@ -16,7 +16,8 @@ class KardexController extends Controller
 {
     public function index()
     {
-        $kardexEntries = Kardex::all();
+        $kardexEntries = Kardex::orderBy('date', 'asc')->get();
+        // $kardexEntries = Kardex::all();
         $operationTypes = OperationType::all();
         $warehouses = Warehouse::all();
         $projects = Project::all();

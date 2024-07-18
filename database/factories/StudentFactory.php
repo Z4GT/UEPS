@@ -19,8 +19,6 @@ class StudentFactory extends Factory
             'card_id' => $this->faker->numerify('##########'),
             'name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
-            'course' => $this->faker->word,
-            'hours' => $this->faker->randomFloat(2, 0, 100),
             'status' => $this->faker->boolean,
         ];
     }

@@ -19,17 +19,19 @@
                                 {{ session('error') }}
                             </div>
                         @endif
-                        <div class="pb-0 card-header">
+                        <div class="pb-2 card-header">
                             <div class="row">
                                 <div class="col-6">
                                     <h5 class="">Proyectos UEPS</h5>
                                 </div>
-                                <div class="col-6 text-end">
-                                    <button type="button" class="btn btn-dark btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#createProjectModal">
-                                        <i class="fas fa-plus me-2"></i> Agregar proyecto
-                                    </button>
-                                </div>
+                                @role('rector')
+                                    <div class="col-6 text-end">
+                                        <button type="button" class="btn btn-dark btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#createProjectModal">
+                                            <i class="fas fa-plus me-2"></i> Agregar proyecto
+                                        </button>
+                                    </div>
+                                @endrole
                             </div>
                         </div>
 

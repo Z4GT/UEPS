@@ -15,7 +15,7 @@ class ModuleController extends Controller
     public function index()
     {
         $modules = Module::all();
-        $responsibles = Responsible::all();
+        $responsibles = Responsible::where('status', true)->get(); //solo responsables activos
         $periods = Period::all();
         return view('modules.modules.index', compact('modules', 'responsibles', 'periods'));
     }

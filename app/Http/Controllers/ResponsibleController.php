@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Responsible;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,9 +22,10 @@ class ResponsibleController extends Controller
             $sortField = 'id_responsible';
         }
 
-        $responsibles = Responsible::orderBy($sortField, $sortDirection)->paginate(10);
+        $responsibles = Responsible::all();
+        $users = User::where('status', true)->get(); // Solo usuarios activos
 
-        return view('modules.responsibles.index', compact('responsibles', 'sortField', 'sortDirection'));
+        return view('modules.responsibles.index', compact('responsibles', 'users', 'sortField', 'sortDirection'));
     }
 
     public function store(Request $request)
@@ -35,6 +37,7 @@ class ResponsibleController extends Controller
             'area' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'status' => 'required|boolean',
+            'id_user' => 'nullable|exists:users,id',
         ]);
 
         // Obtener el último responsable basado en el id_responsible
@@ -65,14 +68,8 @@ class ResponsibleController extends Controller
             'area' => $request->area,
             'role' => $request->role,
             'status' => $request->status,
+            'id_user' => $request->id_user,
         ]);
-
-        // // Verificar si la solicitud proviene del modal de módulos
-        // if ($request->has('from_module') && $request->input('from_module') == 'true') {
-        //     return redirect()->route('modules.index')->with('success', 'Responsable agregado correctamente.');
-        // }
-
-        // return redirect()->route('responsibles.index')->with('success', 'Responsable agregado correctamente.');
 
         return redirect()->back()->with('success', 'Responsable agregado correctamente.');
     }
@@ -87,6 +84,7 @@ class ResponsibleController extends Controller
             'area' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'status' => 'required|boolean',
+            'id_user' => 'nullable|exists:users,id',
         ]);
 
         $responsible = Responsible::findOrFail($id_responsible);

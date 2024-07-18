@@ -57,7 +57,8 @@
                         <span class="nav-link-text ms-1">Panel de Control</span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
+            @endrole
+            {{-- <li class="nav-item">
                     <a class="nav-link  {{ is_current_route('tables') ? 'active' : '' }}" href="{{ route('tables') }}">
                         <div
                             class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
@@ -86,6 +87,7 @@
                         <span class="nav-link-text ms-1">Tablas</span>
                     </a>
                 </li> --}}
+            @role('administrador|coordinador|rector')
                 <li class="nav-item">
                     <a class="nav-link 
                 {{ Request::is('info') || Request::is('info/*') ? 'active' : '' }}"
@@ -110,6 +112,9 @@
                         <span class="nav-link-text ms-1">Información</span>
                     </a>
                 </li>
+            @endrole
+
+            @role('rector|coordinador')
                 <li class="nav-item">
                     <a class="nav-link 
                     {{ Request::is('projects') || Request::is('projects/*') ? 'active' : '' }}"
@@ -134,15 +139,14 @@
                 </li>
             @endrole
 
-
             @role('auditor')
                 <li class="nav-item">
                     <a class="nav-link {{ is_current_route('audits.index') ? 'active' : '' }}"
                         href="{{ route('audits.index') }}">
                         <div
                             class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                            <img src="{{ asset('assets/img/logos/audit.svg') }}" class="tw-w-6"
-                                style="filter: invert(1);" alt="Audit Logo">
+                            <img src="{{ asset('assets/img/logos/audit.svg') }}" class="tw-w-6" style="filter: invert(1);"
+                                alt="Audit Logo">
                         </div>
                         <span class="nav-link-text ms-1">Auditoría</span>
                     </a>

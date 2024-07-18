@@ -14,7 +14,7 @@ class StudentsExport implements FromCollection, WithHeadings, WithStyles, Should
 
     public function collection()
     {
-        return Student::select('id_stud', 'card_id', 'name', 'last_name', 'course', 'hours')->get();
+        return Student::select('id_stud', 'card_id', 'name', 'last_name')->get();
     }
 
     public function headings(): array
@@ -25,7 +25,6 @@ class StudentsExport implements FromCollection, WithHeadings, WithStyles, Should
             'Nombre',
             'Apellido',
             'Curso',
-            'Horas',
         ];
     }
 

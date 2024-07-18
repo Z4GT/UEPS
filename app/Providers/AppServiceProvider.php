@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Task;
 use App\Observers\TaskObserver;
+use App\Models\Kardex;
+use App\Observers\KardexObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Task::observe(TaskObserver::class);
+        // Kardex::observe(KardexObserver::class);
     }
 }

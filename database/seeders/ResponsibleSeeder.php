@@ -14,9 +14,10 @@ class ResponsibleSeeder extends Seeder
 
         Responsible::create([
             'id_responsible' => 'RESP-01',
-            'card_id' => '1234567890',
-            'name' => 'John',
-            'last_name' => 'Doe',
+            'id_user' => '1',
+            'card_id' => '1004548960',
+            'name' => 'Diego',
+            'last_name' => 'Recalde',
             'area' => 'Development',
             'role' => 'Project Manager',
             'status' => true,
@@ -24,6 +25,7 @@ class ResponsibleSeeder extends Seeder
 
         Responsible::create([
             'id_responsible' => 'RESP-02',
+            'id_user' => '2',
             'card_id' => '2345678901',
             'name' => 'Jane',
             'last_name' => 'Smith',
@@ -34,6 +36,7 @@ class ResponsibleSeeder extends Seeder
 
         Responsible::create([
             'id_responsible' => 'RESP-03',
+            'id_user' => '3',
             'card_id' => '3456789012',
             'name' => 'Emily',
             'last_name' => 'Johnson',
@@ -44,6 +47,7 @@ class ResponsibleSeeder extends Seeder
 
         Responsible::create([
             'id_responsible' => 'RESP-04',
+            'id_user' => '4',
             'card_id' => '4567890123',
             'name' => 'Michael',
             'last_name' => 'Brown',
@@ -54,6 +58,7 @@ class ResponsibleSeeder extends Seeder
 
         Responsible::create([
             'id_responsible' => 'RESP-05',
+            'id_user' => '5',
             'card_id' => '5678901234',
             'name' => 'Sarah',
             'last_name' => 'Davis',

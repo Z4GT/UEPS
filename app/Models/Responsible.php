@@ -23,5 +23,6 @@ class Responsible extends Model implements Auditable
         'area',
         'role',
         'status',
+        'id_user',
     ];
 }

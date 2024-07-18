@@ -20,8 +20,6 @@ class Student extends Model implements Auditable
         'card_id',
         'name',
         'last_name',
-        'course',
-        'hours',
         'status',
     ];
 
