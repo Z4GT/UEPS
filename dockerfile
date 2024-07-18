@@ -72,4 +72,4 @@ EXPOSE 8080
 EXPOSE 5173
 
 # Comando de inicio del contenedor
-CMD ["/usr/bin/supervisord"]
+CMD ["sh", "-c", "composer install & npm install && npm run build && php artisan serve --host=0.0.0.0 --port=8080 "]
