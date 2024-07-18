@@ -15,7 +15,7 @@
         }
 
         .container {
-            width: 100%;
+            max-width: 100%;
             margin: 0 auto;
             padding: 10px;
         }
@@ -70,24 +70,28 @@
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Responsable del Proyecto</th>
-                        <th scope="col">Nombre del Proyecto</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Progreso</th>
-                        <th scope="col">Fecha de Inicio</th>
-                        <th scope="col">Fecha de Finalización</th>
-
+                        <th scope="col">Fecha</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Operación</th>
+                        <th scope="col">Almacen</th>
+                        <th scope="col">Proyecto</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Stock</th>                        
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($projects as $project)
+                    @foreach ($kardexEntries as $entry)
                     <tr>
-                        <td>{{ $project->responsible->name }} {{$project->responsible->last_name}}</td>
-                        <td>{{ $project->name }}</td>
-                        <td>{{ $project->status }}</td>
-                        <td>{{ $project->progress }}%</td>
-                        <td>{{ $project->start_date }}</td>
-                        <td>{{ $project->end_date }}</td>
+                        <td class="tw-px-6 tw-py-4">
+                            {{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->id_kardex }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->operationType->name }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->warehouse->name }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->project->name }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->item->name }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->quantity }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $entry->balance }}</td>
                     </tr>
                     @endforeach
                 </tbody>

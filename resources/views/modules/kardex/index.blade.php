@@ -9,7 +9,7 @@
                             <div class="row">
 
                                 <div class="col-6">
-                                    @role('rector')
+                                    @role('rector|jefe de proyecto')
                                         <h5 class="">Administración de Kardex</h5>
                                         <p class="mb-0 text-sm">Aquí puedes gestionar los registros de kardex.</p>
                                     @else
@@ -19,7 +19,7 @@
                                 </div>
 
                                 <div class="col-6 text-end">
-                                    @role('rector')
+                                    @role('rector|jefe de proyecto')
                                         <button type="button" class="btn btn-success btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#createKardexModal">
                                             <i class="fas fa-plus me-2"></i> Agregar entrada
@@ -54,7 +54,7 @@
 
 
                                 <div class="d-flex flex-row justify-content-start">
-                                    @role('rector')
+                                    @role('rector|jefe de proyecto')
                                         <div class="dropdown mr-3">
                                             <button class="btn btn-info dropdown-toggle" type="button"
                                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -103,7 +103,7 @@
                                 <thead
                                     class="tw-text-xs tw-text-gray-700 tw-uppercase tw-bg-gray-50 dark:tw-bg-gray-700 dark:tw-text-gray-400">
                                     <tr>
-                                        @role('rector')
+                                        @role('rector|jefe de proyecto')
                                             <th scope="col" class="tw-p-4">
                                                 <div class="tw-flex tw-items-center">
                                                     <input id="select_all_ids" type="checkbox"
@@ -121,7 +121,7 @@
                                         <th scope="col" class="tw-px-6 tw-py-3">Cantidad</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Precio</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Balance</th>
-                                        @role('rector')
+                                        @role('rector|jefe de proyecto')
                                             <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
                                         @endrole
                                     </tr>
@@ -130,7 +130,7 @@
                                     @foreach ($kardexEntries as $entry)
                                         <tr id="kardex_ids{{ $entry->id_kardex }}"
                                             class="tw-bg-white tw-border-b dark:tw-bg-gray-800 dark:tw-border-gray-700 hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
-                                            @role('rector')
+                                            @role('rector|jefe de proyecto')
                                                 <td class="tw-w-4 tw-p-4">
                                                     <div class="tw-flex tw-items-center">
                                                         <input type="checkbox" value="{{ $entry->id_kardex }}"
@@ -149,7 +149,7 @@
                                             <td class="tw-px-6 tw-py-4">{{ $entry->quantity }}</td>
                                             <td class="tw-px-6 tw-py-4">${{ number_format($entry->price, 2) }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $entry->balance }}</td>
-                                            @role('rector')
+                                            @role('|jefe de proyecto')
                                                 <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
                                                     <a href="#"
                                                         class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"

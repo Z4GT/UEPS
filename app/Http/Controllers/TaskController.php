@@ -4,19 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Project;
+use App\Models\Responsible;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TaskExport;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::all();
-        $projects = Project::all();
+        /** @var \App\Models\User */
+        $user = Auth::user();
+
+        if ($user->hasRole('jefe de proyecto')) {
+            $responsible = Responsible::where('id_user', $user->id)->first();
+
+            if ($responsible) {
+                $tasks = Task::whereHas('project', function ($query) use ($responsible) {
+                    $query->where('id_responsible', $responsible->id_responsible);
+                })->get();
+
+                $projects = Project::where('id_responsible', $responsible->id_responsible)->get();
+            } else {
+                $tasks = collect(); // Empty collection if no responsible found
+                $projects = collect(); // Empty collection if no responsible found
+            }
+        } else {
+            $tasks = Task::all();
+            $projects = Project::all();
+        }
+
         return view('modules.tasks.index', compact('tasks', 'projects'));
     }
 
@@ -108,7 +129,8 @@ class TaskController extends Controller
             'tasks' => $tasks
         ];
 
-        $pdf = PDF::loadView('modules.tasks.pdf', $data);
+        $pdf = PDF::loadView('modules.tasks.pdf', $data)
+              ->setPaper('a4', 'landscape'); // Configurar el formato horizontal
         $pdfName = "Tareas - {$date}.pdf";
 
         return $pdf->download($pdfName);

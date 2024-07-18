@@ -8,7 +8,7 @@
                         <div class="pb-0 card-header">
                             <div class="row">
                                 <div class="col-6">
-                                    @role('rector')
+                                    @role('rector|jefe de proyecto')
                                         <h5 class="">Administración de Tareas</h5>
                                         <p class="mb-0 text-sm">Aquí puedes gestionar las tareas.</p>
                                     @else
@@ -16,7 +16,7 @@
                                         <p class="mb-0 text-sm">Aquí puedes visualizar las tareas.</p>
                                     @endrole
                                 </div>
-                                @role('rector')
+                                @role('rector|jefe de proyecto')
                                     <div class="col-6 text-end">
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                             data-bs-target="#createTaskModal">
@@ -57,7 +57,7 @@
                             <div
                                 class="tw-flex tw-items-center tw-justify-between tw-pb-4 tw-bg-white dark:tw-bg-gray-900">
                                 <div class="d-flex flex-row justify-content-start">
-                                    @role('rector')
+                                    @role('rector|jefe de proyecto')
                                         <div class="dropdown mr-3">
                                             <button class="btn btn-info dropdown-toggle" type="button"
                                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -122,7 +122,7 @@
                                         <th scope="col" class="tw-px-6 tw-py-3">Fecha de Fin</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Porcentaje</th>
                                         <th scope="col" class="tw-px-6 tw-py-3">Estado</th>
-                                        @role('rector')
+                                        @role('rector|jefe de proyecto')
                                             <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
                                         @endrole
                                     </tr>
@@ -131,12 +131,14 @@
                                     @foreach ($tasks as $task)
                                         <tr id="task_ids{{ $task->id_task }}"
                                             class="tw-bg-white tw-border-b dark:tw-bg-gray-800 dark:tw-border-gray-700 hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
-                                            <td class="tw-w-4 tw-p-4">
-                                                <div class="tw-flex tw-items-center">
-                                                    <input type="checkbox" value="{{ $task->id_task }}"
-                                                        class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
-                                                </div>
-                                            </td>
+                                            @role('rector|jefe de proyecto')
+                                                <td class="tw-w-4 tw-p-4">
+                                                    <div class="tw-flex tw-items-center">
+                                                        <input type="checkbox" value="{{ $task->id_task }}"
+                                                            class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                                    </div>
+                                                </td>
+                                            @endrole
                                             <td class="tw-px-6 tw-py-4">{{ $task->id_task }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $task->name }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $task->project->name }}</td>
@@ -155,7 +157,7 @@
                                             <td class="tw-px-6 tw-py-4">{{ $task->end_date }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $task->percentage }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $task->status }} </td>
-                                            @role('rector')
+                                            @role('rector|jefe de proyecto')
                                                 <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
                                                     <a href="#"
                                                         class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"

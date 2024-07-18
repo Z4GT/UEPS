@@ -18,7 +18,7 @@
                         </div>
                     </a>
                 @endrole
-                @role('administrador|coordinador|rector')
+                @role('administrador|coordinador|rector|jefe de proyecto')
                     <a href="{{ route('students.index') }}">
                         <div
                             class="tw-max-w-sm tw-p-6 tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-shadow dark:tw-bg-gray-800 dark:tw-border-gray-700 tw-flex tw-flex-col tw-items-center">

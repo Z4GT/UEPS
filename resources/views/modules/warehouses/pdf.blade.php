@@ -15,7 +15,7 @@
         }
 
         .container {
-            width: 100%;
+            max-width: 100%;
             margin: 0 auto;
             padding: 10px;
         }
@@ -70,24 +70,19 @@
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Responsable del Proyecto</th>
-                        <th scope="col">Nombre del Proyecto</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Progreso</th>
-                        <th scope="col">Fecha de Inicio</th>
-                        <th scope="col">Fecha de Finalización</th>
-
+                        <th scope="col" class="tw-px-6 tw-py-3">ID</th>
+                        <th scope="col" class="tw-px-6 tw-py-3">Categoría</th>
+                        <th scope="col" class="tw-px-6 tw-py-3">Nombre</th>
+                        <th scope="col" class="tw-px-6 tw-py-3">Descripción</th>                    
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($projects as $project)
+                    @foreach ($warehouses as $warehouse)
                     <tr>
-                        <td>{{ $project->responsible->name }} {{$project->responsible->last_name}}</td>
-                        <td>{{ $project->name }}</td>
-                        <td>{{ $project->status }}</td>
-                        <td>{{ $project->progress }}%</td>
-                        <td>{{ $project->start_date }}</td>
-                        <td>{{ $project->end_date }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $warehouse->id_ware }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $warehouse->category->name }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $warehouse->name }}</td>
+                        <td class="tw-px-6 tw-py-4">{{ $warehouse->description }}</td>
                     </tr>
                     @endforeach
                 </tbody>

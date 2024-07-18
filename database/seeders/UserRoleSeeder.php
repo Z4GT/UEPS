@@ -32,11 +32,13 @@ class UserRoleSeeder extends Seeder
         $userCoordinador = User::where('email', 'coordinador@example.com')->first();
         $userCoordinador->assignRole('coordinador');
 
-
         $userRector = User::where('email', 'rector@example.com')->first();
         $userRector->assignRole('rector');
 
         $useraAdministrador = User::where('email', 'administrador@example.com')->first();
-        $useraAdministrador ->assignRole('administrador');
+        $useraAdministrador->assignRole('administrador');
+
+        $userManager = User::where('email', 'manager@example.com')->first();
+        $userManager->assignRole('jefe de proyecto');
     }
 }

@@ -25,12 +25,6 @@ class UserController extends Controller
         return view('modules.users.index', compact('users', 'roles', 'sortField', 'sortDirection'));
     }
 
-    // public function index()
-    // {
-    //     $users = User::orderByDesc('id')->get();
-    //     $roles = Role::all();
-    //     return view('modules.users.index', compact('users', 'roles'));
-    // }
 
     public function store(Request $request)
     {
