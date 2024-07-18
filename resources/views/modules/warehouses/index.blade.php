@@ -50,23 +50,37 @@
                             <span class="tw-block sm:tw-inline" id="message-text"></span>
                         </div>
 
-                        <div class="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-p-5">
-                            <div
-                                class="tw-flex tw-items-center tw-justify-between tw-pb-4 tw-bg-white dark:tw-bg-gray-900">
+                        <div class="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-p-5" style="overflow: hidden;">
+                            <div class="d-flex flex-row justify-content-start">
                                 @role('administrador')
-                                    <div class="tw-flex-1">
-                                        <div class="dropdown">
-                                            <button class="btn btn-info dropdown-toggle" type="button"
-                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                Acción
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
-                                            </div>
+                                    <div class="dropdown mr-3">
+                                        <button class="btn btn-info dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Acción
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#"
+                                                id="deactivateSelected">Desactivar</a>
+                                            <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
+
                                         </div>
                                     </div>
                                 @endrole
+                                <div class="dropdown">
+                                    <button class="btn btn-info dropdown-toggle" type="button"
+                                        id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        Generar
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                        <a class="dropdown-item" href="{{ route('warehouses.pdf') }}"
+                                            id="excel">PDF</a>
+                                        <a class="dropdown-item" href="{{ route('responsibles.download-excel') }}"
+                                            id="xls">Excel</a>
+                                    </div>
+                                </div>
+                            </div>
                                 <div class="tw-flex-1 tw-flex tw-justify-end">
                                     <label for="table-search" class="tw-sr-only">Search</label>
                                     <div class="tw-relative">

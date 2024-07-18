@@ -9,7 +9,7 @@
                         <div class="pb-2 card-header">
                             <div class="row">
                                 <div class="col-6">
-                                    @role('rector')
+                                    @role('rector|jefe de proyecto')
                                         <h5 class="">Administración de Proyectos</h5>
                                         <p class="mb-0 text-sm">Aquí puedes gestionar los proyectos.</p>
                                     @else
@@ -17,7 +17,7 @@
                                         <p class="mb-0 text-sm">Aquí puedes visualizar los proyectos.</p>
                                     @endrole
                                 </div>
-                                @role('rector')
+                                @role('rector|jefe de proyecto')
                                     <div class="col-6 text-end">
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                             data-bs-target="#createProjectModal">
@@ -39,307 +39,315 @@
                             </div>
                         @endif
 
-                        <!-- Mensaje de éxito -->
-                        <div id="message"
-                            class="tw-hidden tw-bg-green-100 tw-border tw-border-green-400 tw-text-green-700 tw-px-4 tw-py-3 tw-rounded tw-relative"
-                            role="alert">
-                            <strong class="tw-font-bold">Éxito!</strong>
-                            <span class="tw-block sm:tw-inline" id="message-text"></span>
-                        </div>
+                        @if ($projects->isEmpty())
+                            <div class="alert alert-warning" role="alert">
+                                No tienes proyectos asignados.
+                            </div>
+                        @else
+                            <div id="message"
+                                class="tw-hidden tw-bg-green-100 tw-border tw-border-green-400 tw-text-green-700 tw-px-4 tw-py-3 tw-rounded tw-relative"
+                                role="alert">
+                                <strong class="tw-font-bold">Éxito!</strong>
+                                <span class="tw-block sm:tw-inline" id="message-text"></span>
+                            </div>
 
-                        <div class="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-p-5">
-                            <div
-                                class="tw-flex tw-items-center tw-justify-between tw-pb-4 tw-bg-white dark:tw-bg-gray-900">
-                                <div class="d-flex flex-row justify-content-start">
-                                    @role('rector')
-                                        <div class="dropdown mr-3">
+                            <div class="tw-relative tw-overflow-x-auto tw-shadow-md sm:tw-rounded-lg tw-p-5">
+                                <div
+                                    class="tw-flex tw-items-center tw-justify-between tw-pb-4 tw-bg-white dark:tw-bg-gray-900">
+                                    <div class="d-flex flex-row justify-content-start">
+                                        @role('rector|jefe de proyecto')
+                                            <div class="dropdown mr-3">
+                                                <button class="btn btn-info dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    Acción
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
+                                                </div>
+                                            </div>
+                                        @endrole
+                                        <div class="dropdown mr-2">
                                             <button class="btn btn-info dropdown-toggle" type="button"
-                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false">
-                                                Acción
+                                                Generar
                                             </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#" id="deleteSelected">Eliminar</a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                                <a class="dropdown-item" href="{{ route('projects.pdf') }}"
+                                                    id="excel">PDF</a>
+                                                <a class="dropdown-item" href="{{ route('projects.download-excel') }}"
+                                                    id="xls">Excel</a>
                                             </div>
                                         </div>
-                                    @endrole
-                                    <div class="dropdown mr-2">
-                                        <button class="btn btn-info dropdown-toggle" type="button"
-                                            id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            Generar
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                            <a class="dropdown-item" href="{{ route('projects.pdf') }}"
-                                                id="excel">PDF</a>
-                                            <a class="dropdown-item" href="{{ route('projects.download-excel') }}"
-                                                id="xls">Excel</a>
-                                        </div>
                                     </div>
-                                </div>
 
-                                <label for="table-search" class="tw-sr-only">Buscar</label>
-                                <div class="tw-relative">
-                                    <div
-                                        class="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
-                                        <svg class="tw-w-4 tw-h-4 tw-text-gray-500 dark:tw-text-gray-400"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                        </svg>
+                                    <label for="table-search" class="tw-sr-only">Buscar</label>
+                                    <div class="tw-relative">
+                                        <div
+                                            class="tw-absolute tw-inset-y-0 tw-start-0 tw-flex tw-items-center tw-ps-3 tw-pointer-events-none">
+                                            <svg class="tw-w-4 tw-h-4 tw-text-gray-500 dark:tw-text-gray-400"
+                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 20 20">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                            </svg>
+                                        </div>
+                                        <input type="text" id="table-search-projects"
+                                            class="tw-block tw-p-2 tw-ps-10 tw-text-sm tw-text-gray-900 tw-border tw-border-gray-300 tw-rounded-lg tw-w-80 tw-bg-gray-50 focus:tw-ring-blue-500 focus:tw-border-blue-500 dark:tw-bg-gray-700 dark:tw-border-gray-600 dark:tw-placeholder-gray-400 dark:tw-text-white dark:focus:tw-ring-blue-500 dark:focus:tw-border-blue-500"
+                                            placeholder="Buscar proyecto..."
+                                            onkeyup="searchTable('table-search-projects','table-projects')">
                                     </div>
-                                    <input type="text" id="table-search-projects"
-                                        class="tw-block tw-p-2 tw-ps-10 tw-text-sm tw-text-gray-900 tw-border tw-border-gray-300 tw-rounded-lg tw-w-80 tw-bg-gray-50 focus:tw-ring-blue-500 focus:tw-border-blue-500 dark:tw-bg-gray-700 dark:tw-border-gray-600 dark:tw-placeholder-gray-400 dark:tw-text-white dark:focus:tw-ring-blue-500 dark:focus:tw-border-blue-500"
-                                        placeholder="Buscar proyecto..."
-                                        onkeyup="searchTable('table-search-projects','table-projects')">
                                 </div>
-                            </div>
-                            <table id="table-projects"
-                                class="tw-w-full tw-text-sm tw-text-left tw-rtl:tw-text-right tw-text-gray-500 dark:tw-text-gray-400">
-                                <thead
-                                    class="tw-text-xs tw-text-gray-700 tw-uppercase tw-bg-gray-50 dark:tw-bg-gray-700 dark:tw-text-gray-400">
-                                    <tr>
-                                        @role('rector')
-                                            <th scope="col" class="tw-p-4">
+                                <table id="table-projects"
+                                    class="tw-w-full tw-text-sm tw-text-left tw-rtl:tw-text-right tw-text-gray-500 dark:tw-text-gray-400">
+                                    <thead
+                                        class="tw-text-xs tw-text-gray-700 tw-uppercase tw-bg-gray-50 dark:tw-bg-gray-700 dark:tw-text-gray-400">
+                                        <tr>
+                                            @role('rector|jefe de proyecto')
+                                                <th scope="col" class="tw-p-4">
+                                                    <div class="tw-flex tw-items-center">
+                                                        <input id="select_all_ids" type="checkbox"
+                                                            class="tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                                    </div>
+                                                </th>
+                                            @endrole
+                                            <th scope="col" class="tw-px-6 tw-py-3">
                                                 <div class="tw-flex tw-items-center">
-                                                    <input id="select_all_ids" type="checkbox"
-                                                        class="tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                                    ID
+                                                    <a
+                                                        href="?sort=id_pro&direction={{ $sortField === 'id_pro' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
                                                 </div>
                                             </th>
-                                        @endrole
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                ID
-                                                <a
-                                                    href="?sort=id_pro&direction={{ $sortField === 'id_pro' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Nombre
-                                                <a
-                                                    href="?sort=name&direction={{ $sortField === 'name' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Responsable
-                                                <a
-                                                    href="?sort=id_responsible&direction={{ $sortField === 'id_responsible' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Descripción</th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Estado
-                                                <a
-                                                    href="?sort=status&direction={{ $sortField === 'status' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Progreso
-                                                <a
-                                                    href="?sort=progress&direction={{ $sortField === 'progress' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Fecha de Inicio
-                                                <a
-                                                    href="?sort=start_date&direction={{ $sortField === 'start_date' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Fecha de Fin
-                                                <a
-                                                    href="?sort=end_date&direction={{ $sortField === 'end_date' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">
-                                            <div class="tw-flex tw-items-center">
-                                                Presupuesto
-                                                <a
-                                                    href="?sort=budget&direction={{ $sortField === 'budget' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
-                                                    <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
-                                                        src="{{ asset('assets/img/logos/up-down.svg') }}">
-                                                </a>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="tw-px-6 tw-py-3">Módulos</th>
-                                        @role('rector')
-                                            <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
-                                        @endrole
-                                    </tr>
-                                </thead>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Nombre
+                                                    <a
+                                                        href="?sort=name&direction={{ $sortField === 'name' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Responsable
+                                                    <a
+                                                        href="?sort=id_responsible&direction={{ $sortField === 'id_responsible' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">Descripción</th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Estado
+                                                    <a
+                                                        href="?sort=status&direction={{ $sortField === 'status' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Progreso
+                                                    <a
+                                                        href="?sort=progress&direction={{ $sortField === 'progress' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Fecha de Inicio
+                                                    <a
+                                                        href="?sort=start_date&direction={{ $sortField === 'start_date' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Fecha de Fin
+                                                    <a
+                                                        href="?sort=end_date&direction={{ $sortField === 'end_date' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">
+                                                <div class="tw-flex tw-items-center">
+                                                    Presupuesto
+                                                    <a
+                                                        href="?sort=budget&direction={{ $sortField === 'budget' && $sortDirection === 'asc' ? 'desc' : 'asc' }}">
+                                                        <img class="tw-w-3 tw-h-3 tw-ms-1.5" aria-hidden="true"
+                                                            src="{{ asset('assets/img/logos/up-down.svg') }}">
+                                                    </a>
+                                                </div>
+                                            </th>
+                                            <th scope="col" class="tw-px-6 tw-py-3">Módulos</th>
+                                            @role('rector|jefe de proyecto')
+                                                <th scope="col" class="tw-px-6 tw-py-3">Acción</th>
+                                            @endrole
+                                        </tr>
+                                    </thead>
 
-                                <tbody>
-                                    @foreach ($projects as $project)
-                                        <tr id="project_ids{{ $project->id_pro }}"
-                                            class="tw-bg-white tw-border-b dark:tw-bg-gray-800 dark:tw-border-gray-700 hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
-                                            @role('rector')
-                                                <td class="tw-w-4 tw-p-4">
-                                                    <div class="tw-flex tw-items-center">
-                                                        <input type="checkbox" value="{{ $project->id_pro }}"
-                                                            class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                    <tbody>
+                                        @foreach ($projects as $project)
+                                            <tr id="project_ids{{ $project->id_pro }}"
+                                                class="tw-bg-white tw-border-b dark:tw-bg-gray-800 dark:tw-border-gray-700 hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
+                                                @role('rector|jefe de proyecto')
+                                                    <td class="tw-w-4 tw-p-4">
+                                                        <div class="tw-flex tw-items-center">
+                                                            <input type="checkbox" value="{{ $project->id_pro }}"
+                                                                class="checkbox_ids tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600">
+                                                        </div>
+                                                    </td>
+                                                @endrole
+                                                <td class="tw-px-6 tw-py-4">{{ $project->id_pro }}</td>
+                                                <td class="tw-px-6 tw-py-4">{{ $project->name }}</td>
+                                                <td class="tw-px-6 tw-py-4">{{ $project->responsible->name }}
+                                                    {{ $project->responsible->last_name }}</td>
+                                                <td class="tw-px-6 tw-py-4">
+                                                    <button
+                                                        class="toggle-description tw-text-blue-600 hover:tw-underline"
+                                                        data-project-id="{{ $project->id_pro }}">
+                                                        <img src="{{ asset('assets/img/logos/plus.svg') }}"
+                                                            class="tw-w-5 tw-h-5">
+                                                    </button>
+                                                    <div class="description-content tw-hidden tw-mt-2">
+                                                        {{ $project->description }}
                                                     </div>
                                                 </td>
-                                            @endrole
-                                            <td class="tw-px-6 tw-py-4">{{ $project->id_pro }}</td>
-                                            <td class="tw-px-6 tw-py-4">{{ $project->name }}</td>
-                                            <td class="tw-px-6 tw-py-4">{{ $project->responsible->name }}
-                                                {{ $project->responsible->last_name }}</td>
-                                            <td class="tw-px-6 tw-py-4">
-                                                <button class="toggle-description tw-text-blue-600 hover:tw-underline"
-                                                    data-project-id="{{ $project->id_pro }}">
-                                                    <img src="{{ asset('assets/img/logos/plus.svg') }}"
-                                                        class="tw-w-5 tw-h-5">
-                                                </button>
-                                                <div class="description-content tw-hidden tw-mt-2">
-                                                    {{ $project->description }}
-                                                </div>
-                                            </td>
-                                            <td class="tw-px-6 tw-py-4">{{ $project->status }}</td>
-                                            <td class="tw-px-6 tw-py-4">
-                                                <div
-                                                    class="tw-mb-1 tw-text-base tw-font-medium tw-text-gray-700 dark:tw-text-gray-400">
-                                                    {{ $project->progress }}%
-                                                </div>
-                                                <div
-                                                    class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-2.5 dark:tw-bg-gray-700">
-                                                    <div class="tw-bg-blue-600 tw-h-2.5 tw-rounded-full"
-                                                        style="width: {{ $project->progress }}%"></div>
-                                                </div>
-                                            </td>
-                                            <td class="tw-px-6 tw-py-4">{{ $project->start_date }}</td>
-                                            <td class="tw-px-6 tw-py-4">{{ $project->end_date }}</td>
-                                            <td class="tw-px-6 tw-py-4">${{ number_format($project->budget, 2) }}</td>
-                                            <td class="tw-px-6 tw-py-4">
-                                                <button class="btn btn-info" data-bs-toggle="modal"
-                                                    data-bs-target="#modulesModal{{ $project->id_pro }}">
-                                                    Ver
-                                                </button>
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="modulesModal{{ $project->id_pro }}"
-                                                    tabindex="-1"
-                                                    aria-labelledby="modulesModalLabel{{ $project->id_pro }}"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title"
-                                                                    id="modulesModalLabel{{ $project->id_pro }}">
-                                                                    Módulos de {{ $project->name }}</h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <ul class="list-group">
-                                                                    @foreach ($project->modules as $module)
-                                                                        <li class="list-group-item">
-                                                                            {{ $module->name }}</li>
-                                                                    @endforeach
-                                                                </ul>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cerrar</button>
+                                                <td class="tw-px-6 tw-py-4">{{ $project->status }}</td>
+                                                <td class="tw-px-6 tw-py-4">
+                                                    <div
+                                                        class="tw-mb-1 tw-text-base tw-font-medium tw-text-gray-700 dark:tw-text-gray-400">
+                                                        {{ $project->progress }}%
+                                                    </div>
+                                                    <div
+                                                        class="tw-w-full tw-bg-gray-200 tw-rounded-full tw-h-2.5 dark:tw-bg-gray-700">
+                                                        <div class="tw-bg-blue-600 tw-h-2.5 tw-rounded-full"
+                                                            style="width: {{ $project->progress }}%"></div>
+                                                    </div>
+                                                </td>
+                                                <td class="tw-px-6 tw-py-4">{{ $project->start_date }}</td>
+                                                <td class="tw-px-6 tw-py-4">{{ $project->end_date }}</td>
+                                                <td class="tw-px-6 tw-py-4">${{ number_format($project->budget, 2) }}
+                                                </td>
+                                                <td class="tw-px-6 tw-py-4">
+                                                    <button class="btn btn-info" data-bs-toggle="modal"
+                                                        data-bs-target="#modulesModal{{ $project->id_pro }}">
+                                                        Ver
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="modulesModal{{ $project->id_pro }}"
+                                                        tabindex="-1"
+                                                        aria-labelledby="modulesModalLabel{{ $project->id_pro }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="modulesModalLabel{{ $project->id_pro }}">
+                                                                        Módulos de {{ $project->name }}</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <ul class="list-group">
+                                                                        @foreach ($project->modules as $module)
+                                                                            <li class="list-group-item">
+                                                                                {{ $module->name }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Cerrar</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            @role('rector')
-                                                <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
-                                                    <a href="#"
-                                                        class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"
-                                                        data-bs-toggle="modal" data-bs-target="#editProjectModal"
-                                                        data-project-id="{{ $project->id_pro }}"
-                                                        data-project-name="{{ $project->name }}"
-                                                        data-project-responsible="{{ $project->id_responsible }}"
-                                                        data-project-description="{{ $project->description }}"
-                                                        data-project-status="{{ $project->status }}"
-                                                        data-project-progress="{{ $project->progress }}"
-                                                        data-project-start_date="{{ $project->start_date }}"
-                                                        data-project-end_date="{{ $project->end_date }}"
-                                                        data-project-budget="{{ $project->budget }}">
-                                                        <svg class="tw-w-6 tw-h-6 tw-text-gray-800 dark:tw-text-white"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" fill="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path fill-rule="evenodd"
-                                                                d="M14 4.182A4.136 4.136 0 0 1 16.9 3c1.087 0 2.13.425 2.899 1.182A4.01 4.01 0 0 1 21 7.037c0 1.068-.43 2.092-1.194 2.849L18.5 11.214l-5.8-5.71 1.287-1.31.012-.012Zm-2.717 2.763L6.186 12.13l2.175 2.141 5.063-5.218-2.141-2.108Zm-6.25 6.886-1.98 5.849a.992.992 0 0 0 .245 1.026 1.03 1.03 0 0 0 1.043.242L10.282 19l-5.25-5.168Zm6.954 4.01 5.096-5.186-2.218-2.183-5.063 5.218 2.185 2.15Z"
-                                                                clip-rule="evenodd" />
-                                                        </svg>
-                                                    </a>
-                                                    <form action="{{ route('projects.destroy', $project->id_pro) }}"
-                                                        method="POST" style="display:inline-block;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="tw-font-medium tw-text-red-600 dark:tw-text-red-500 hover:tw-underline"
-                                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">
+                                                </td>
+                                                @role('rector|jefe de proyecto')
+                                                    <td class="tw-px-6 tw-py-4 tw-flex tw-space-x-2">
+                                                        <a href="#"
+                                                            class="tw-font-medium tw-text-blue-600 dark:tw-text-blue-500 hover:tw-underline"
+                                                            data-bs-toggle="modal" data-bs-target="#editProjectModal"
+                                                            data-project-id="{{ $project->id_pro }}"
+                                                            data-project-name="{{ $project->name }}"
+                                                            data-project-responsible="{{ $project->id_responsible }}"
+                                                            data-project-description="{{ $project->description }}"
+                                                            data-project-status="{{ $project->status }}"
+                                                            data-project-progress="{{ $project->progress }}"
+                                                            data-project-start_date="{{ $project->start_date }}"
+                                                            data-project-end_date="{{ $project->end_date }}"
+                                                            data-project-budget="{{ $project->budget }}">
                                                             <svg class="tw-w-6 tw-h-6 tw-text-gray-800 dark:tw-text-white"
                                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                                 width="24" height="24" fill="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path fill-rule="evenodd"
-                                                                    d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                                                    d="M14 4.182A4.136 4.136 0 0 1 16.9 3c1.087 0 2.13.425 2.899 1.182A4.01 4.01 0 0 1 21 7.037c0 1.068-.43 2.092-1.194 2.849L18.5 11.214l-5.8-5.71 1.287-1.31.012-.012Zm-2.717 2.763L6.186 12.13l2.175 2.141 5.063-5.218-2.141-2.108Zm-6.25 6.886-1.98 5.849a.992.992 0 0 0 .245 1.026 1.03 1.03 0 0 0 1.043.242L10.282 19l-5.25-5.168Zm6.954 4.01 5.096-5.186-2.218-2.183-5.063 5.218 2.185 2.15Z"
                                                                     clip-rule="evenodd" />
                                                             </svg>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            @endrole
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div
-                                class="tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-3 tw-bg-white tw-border-t tw-border-gray-200 sm:tw-px-6">
-                                <div class="tw-flex tw-items-center">
-                                    <span class="tw-text-sm tw-text-gray-700 tw-mr-2">Mostrar</span>
-                                    <select id="records-per-page"
-                                        class="tw-form-select tw-rounded-md tw-shadow-sm tw-text-sm tw-font-medium tw-text-gray-700 tw-bg-white hover:tw-bg-gray-50 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-offset-2 focus:tw-ring-offset-gray-100 focus:tw-ring-indigo-500">
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                    </select>
-                                    <span class="tw-text-sm tw-text-gray-700 tw-ml-2">registros</span>
-                                </div>
-                                <div class="tw-flex tw-items-center">
-                                    <span class="tw-text-sm tw-text-gray-700 tw-mr-2">Página</span>
-                                    <div id="pagination-numbers" class="tw-flex tw-space-x-2">
-                                        <!-- Los números de página se renderizarán aquí -->
+                                                        </a>
+                                                        <form action="{{ route('projects.destroy', $project->id_pro) }}"
+                                                            method="POST" style="display:inline-block;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="tw-font-medium tw-text-red-600 dark:tw-text-red-500 hover:tw-underline"
+                                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">
+                                                                <svg class="tw-w-6 tw-h-6 tw-text-gray-800 dark:tw-text-white"
+                                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24" height="24" fill="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                @endrole
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <div
+                                    class="tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-3 tw-bg-white tw-border-t tw-border-gray-200 sm:tw-px-6">
+                                    <div class="tw-flex tw-items-center">
+                                        <span class="tw-text-sm tw-text-gray-700 tw-mr-2">Mostrar</span>
+                                        <select id="records-per-page"
+                                            class="tw-form-select tw-rounded-md tw-shadow-sm tw-text-sm tw-font-medium tw-text-gray-700 tw-bg-white hover:tw-bg-gray-50 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-offset-2 focus:tw-ring-offset-gray-100 focus:tw-ring-indigo-500">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                        <span class="tw-text-sm tw-text-gray-700 tw-ml-2">registros</span>
+                                    </div>
+                                    <div class="tw-flex tw-items-center">
+                                        <span class="tw-text-sm tw-text-gray-700 tw-mr-2">Página</span>
+                                        <div id="pagination-numbers" class="tw-flex tw-space-x-2">
+                                            <!-- Los números de página se renderizarán aquí -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

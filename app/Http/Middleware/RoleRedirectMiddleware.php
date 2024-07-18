@@ -23,6 +23,8 @@ class RoleRedirectMiddleware
                 return redirect('/projects');
             } elseif ($user->hasRole('rector')) {
                 return redirect('/info');
+            } elseif ($user->hasRole('jefe de proyecto')) {
+                return redirect('/projects');
             }
 
             // mas roles

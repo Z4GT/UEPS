@@ -40,5 +40,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $roleRector = Role::create(['name' => 'rector']);
         $roleRector->givePermissionTo(['leer', 'reportar', 'crear proyectos', 'editar proyectos', 'eliminar proyectos', 'reportar proyectos']);
+
+        $roleManager = Role::create(['name' => 'jefe de proyecto']);
+        $roleManager->givePermissionTo(['leer', 'reportar', 'crear proyectos', 'editar proyectos', 'eliminar proyectos', 'reportar proyectos']);
     }
 }

@@ -127,7 +127,7 @@ Route::middleware(['throttle:login_attempts'])->group(function () {
 Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
 
     //rutas de todos excepto auditor
-    Route::group(['middleware' => ['role:administrador|coordinador|rector']], function () {
+    Route::group(['middleware' => ['role:administrador|coordinador|rector|jefe de proyecto']], function () {
 
         // Estudiantes
         Route::resource('/info/students', StudentController::class);
@@ -247,8 +247,8 @@ Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
         Route::delete('/info/selected-operations', [OperationTypeController::class, 'deleteAll'])->name('operation.delete');
     });
 
-    // Rutas de rector y coordinador
-    Route::group(['middleware' => ['role:rector|coordinador']], function () {
+    // Rutas de rector, coordinador y jefe de proyecto
+    Route::group(['middleware' => ['role:rector|coordinador|jefe de proyecto']], function () {
 
         //Proyectos 
         Route::get('/projects', [ProjectController::class, 'list'])->name('projects.list');
@@ -258,7 +258,7 @@ Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
 
 
     // Rutas de rector
-    Route::group(['middleware' => ['role:rector']], function () {
+    Route::group(['middleware' => ['role:rector|jefe de proyecto']], function () {
 
         //Proyectos
         Route::delete('/info/selected-projects', [ProjectController::class, 'deleteAll'])->name('project.delete');
@@ -277,6 +277,7 @@ Route::group(['middleware' => ['auth', 'verified', '2fa']], function () {
     // Rutas de auditor
     Route::group(['middleware' => ['role:auditor']], function () {
         Route::get('/audits', [AuditController::class, 'index'])->name('audits.index');
+        Route::get('/audits/charts', [AuditController::class, 'charts'])->name('audits.charts');
         Route::get('/audits/pdf', [AuditController::class, 'generatePDF'])->name('audits.pdf');
     });
 

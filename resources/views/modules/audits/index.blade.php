@@ -131,7 +131,10 @@
                                             class="tw-bg-white tw-border-b dark:tw-bg-gray-800 dark:tw-border-gray-700 hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
                                             <td class="tw-px-6 tw-py-4">{{ $audit->id }}</td>
                                             {{-- <td class="tw-px-6 tw-py-4">{{ $audit->user_type }}</td> --}}
-                                            <td class="tw-px-6 tw-py-4">{{ $audit->user_id }}</td>
+                                            <td class="tw-px-6 tw-py-4">
+                                                <a href="#" class="show-user-details"
+                                                    data-user-id="{{ $audit->user_id }}">{{ $audit->user_id }}</a>
+                                            </td>
                                             <td class="tw-px-6 tw-py-4">{{ $audit->event }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $audit->auditable_type }}</td>
                                             <td class="tw-px-6 tw-py-4">{{ $audit->auditable_id }}</td>
@@ -202,6 +205,55 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para ver detalles del usuario -->
+    <div class="modal fade" id="userDetailsModal" tabindex="-1" aria-labelledby="userDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userDetailsModalLabel">Detalles del Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        style="background-color: red"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col col-md-9 col-lg-7 col-xl-9">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <img id="userProfilePhoto" src="" alt="Foto de perfil"
+                                                class="img-fluid" style="width: 180px; border-radius: 10px;">
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h5 id="userName" class="mb-1"></h5>
+                                            <p id="userRoles" class="mb-2 pb-1 text-sm"></p>
+                                            <div
+                                                class="d-flex justify-content-start rounded-3 p-2 mb-2 bg-body-tertiary">
+                                                <div>
+                                                    <p class="small text-muted mb-1">ID</p>
+                                                    <p id="userId" class="mb-0 text-sm"></p>
+                                                </div>
+                                                <div class="px-3">
+                                                    <p class="small text-muted mb-1">Estado</p>
+                                                    <p id="userStatus" class="mb-0 text-sm"></p>
+                                                </div>
+                                                <div class="px-3">
+                                                    <p class="small text-muted mb-1">Email</p>
+                                                    <p id="userEmail" class="mb-0 text-sm"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
 
 <script>
@@ -226,6 +278,63 @@
     });
 </script>
 
+<script>
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const users = @json($users);
+        const roles = @json($roles);
+
+        document.querySelectorAll('.show-user-details').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const userId = this.getAttribute('data-user-id');
+                const user = users.find(u => u.id == userId);
+
+                if (user) {
+                    document.getElementById('userName').textContent = user.name + ' ' + user
+                        .last_name;
+                    // document.getElementById('userRoles').textContent = 'hola!';
+                    var rolesList = document.getElementById('userRoles');
+                    rolesList.innerHTML = '';
+
+                    fetch('/info/users/' + userId + '/roles')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.roles.length > 0) {
+                                data.roles.forEach(function(role) {
+                                    var listItem = document.createElement('li');
+                                    listItem.textContent = capitalizeFirstLetter(
+                                        role);
+                                    listItem.classList.add('list-group-item');
+                                    rolesList.appendChild(listItem);
+                                });
+                            } else {
+                                var listItem = document.createElement('li');
+                                listItem.textContent = 'No tiene roles asignados';
+                                listItem.classList.add('list-group-item');
+                                rolesList.appendChild(listItem);
+                            }
+                        });
+
+
+                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('userId').textContent = user.id;
+                    document.getElementById('userStatus').textContent = user.status ? 'Activo' :
+                        'Inactivo';
+                    document.getElementById('userProfilePhoto').src = user.profile_photo_path ||
+                        '../storage/profile_photos/default.jpg';
+
+                    new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
+                } else {
+                    alert('Usuario no encontrado');
+                }
+            });
+        });
+    });
+</script>
 
 <script>
     function formatJSON(json) {

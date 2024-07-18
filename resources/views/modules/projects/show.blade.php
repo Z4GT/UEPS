@@ -22,7 +22,7 @@
                                 class="btn btn-dark btn-primary mr-3">
                                 <i class="fas fa-file-text me-2"></i> Reporte
                             </a>
-                            @role('rector')
+                            @role('rector|jefe de proyecto')
                                 <button type="button" class="btn btn-dark btn-primary mr-3" data-bs-toggle="modal"
                                     data-bs-target="#editProjectModal" data-project="{{ json_encode($project) }}">
                                     <i class="fas fa-pencil me-2"></i> Editar proyecto
@@ -131,7 +131,7 @@
                                                     onclick="filterTasks('Pendiente')">Pendientes</a>
                                             </div>
                                         </div>
-                                        @role('rector')
+                                        @role('rector|jefe de proyecto')
                                             <button type="button" class="btn btn-success mr-3" data-bs-toggle="modal"
                                                 data-bs-target="#createTaskModal">
                                                 <i class="fas fa-plus me-2"></i> Agregar tarea
@@ -164,13 +164,15 @@
                                                                             class="img-fluid" alt="Pendiente Logo"
                                                                             style="width: 40px;">
                                                                     @endif
-                                                                    <button type="button"
-                                                                        class="btn btn-dark btn-primary mr-2"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#editTaskModal"
-                                                                        data-task="{{ json_encode($task) }}">
-                                                                        <i class="fas fa-pencil me-2"></i>
-                                                                    </button>
+                                                                    @role('rector|jefe de proyecto')
+                                                                        <button type="button"
+                                                                            class="btn btn-dark btn-primary mr-2"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#editTaskModal"
+                                                                            data-task="{{ json_encode($task) }}">
+                                                                            <i class="fas fa-pencil me-2"></i>
+                                                                        </button>
+                                                                    @endrole
                                                                 </div>
                                                                 <h5 class="card-title">{{ $task->name }}</h5>
                                                                 <p class="card-text"><strong>Horas:</strong>
@@ -195,7 +197,7 @@
 
                                 <div id="kardex-content" class="tab-pane contents">
                                     <div class="d-flex justify-content-end ">
-                                        @role('rector')
+                                        @role('rector|jefe de proyecto')
                                             <button type="button" class="btn btn-success mr-3 mb-2"
                                                 data-bs-toggle="modal" data-bs-target="#createKardexModal">
                                                 <i class="fas fa-plus me-2"></i> Agregar registro
@@ -247,7 +249,7 @@
                                 </div>
                                 <div id="inventory-content" class="tab-pane mt-0 contents">
                                     <div class="d-flex justify-content-end mt-0">
-                                        @role('rector')
+                                        @role('rector|jefe de proyecto')
                                             <button type="button" class="btn btn-success mr-3 mb-2"
                                                 data-bs-toggle="modal" data-bs-target="#createItemModal">
                                                 <i class="fas fa-plus me-2"></i> Agregar item

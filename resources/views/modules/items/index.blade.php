@@ -70,6 +70,19 @@
                                     @endrole
                                     <div class="dropdown">
                                         <button class="btn btn-info dropdown-toggle" type="button"
+                                            id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Generar
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                            <a class="dropdown-item" href="{{ route('items.pdf') }}"
+                                                id="excel">PDF</a>
+                                            <a class="dropdown-item" href="{{ route('items.download-excel') }}"
+                                                id="xls">Excel</a>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-info dropdown-toggle" type="button"
                                             id="sortDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
                                             Ordenar por

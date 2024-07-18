@@ -11,19 +11,40 @@ use App\Models\Item;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KardexExport;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Responsible;
 
 class KardexController extends Controller
 {
     public function index()
     {
-        $kardexEntries = Kardex::orderBy('date', 'asc')->get();
-        // $kardexEntries = Kardex::all();
+        /** @var \App\Models\User */
+        $user = Auth::user();
+
+        if ($user->hasRole('jefe de proyecto')) {
+            $responsible = Responsible::where('id_user', $user->id)->first();
+
+            if ($responsible) {
+                $projectIds = Project::where('id_responsible', $responsible->id_responsible)->pluck('id_pro');
+                $kardexEntries = Kardex::whereIn('id_pro', $projectIds)->orderBy('date', 'asc')->get();
+                $projects = Project::whereIn('id_pro', $projectIds)->get();
+            } else {
+                $kardexEntries = collect(); // Empty collection if no responsible found
+                $projects = collect(); // Empty collection if no responsible found
+            }
+        } else {
+            $kardexEntries = Kardex::orderBy('date', 'asc')->get();
+            $projectIds = $kardexEntries->pluck('id_pro')->unique();
+            $projects = Project::whereIn('id_pro', $projectIds)->get();
+        }
+
         $operationTypes = OperationType::all();
         $warehouses = Warehouse::all();
-        $projects = Project::all();
         $items = Item::all();
+
         return view('modules.kardex.index', compact('kardexEntries', 'operationTypes', 'warehouses', 'projects', 'items'));
     }
+
 
     public function store(Request $request)
     {
@@ -118,20 +139,23 @@ class KardexController extends Controller
 
     public function generatePDF()
     {
-        $kardexEntries = Kardex::all();
+        // Ordena los registros por fecha en orden descendente
+        $kardexEntries = Kardex::orderBy('date', 'desc')->get();
         $date = date('d/m/Y H:i:s');
-
+    
         $data = [
             'title' => 'Registros de kardex',
             'date' => $date,
             'kardexEntries' => $kardexEntries
         ];
-
-        $pdf = PDF::loadView('modules.kardex.pdf', $data);
+    
+        $pdf = PDF::loadView('modules.kardex.pdf', $data)
+            ->setPaper('a4', 'landscape');
         $pdfName = "Kardex - {$date}.pdf";
-
+    
         return $pdf->download($pdfName);
     }
+    
 
     // public function exportExcel()
     // {
